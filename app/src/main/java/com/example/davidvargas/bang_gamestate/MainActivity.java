@@ -23,7 +23,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v)
     {
         switch (v.getId()) {
-            case R.id.runTestButton: //if the hair button is clicked, the hair color is represented by the SeekBars
+            case R.id.runTestButton:
+                //do code for run test button here
                 break;
         }
     }
