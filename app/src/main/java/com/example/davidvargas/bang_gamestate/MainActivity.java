@@ -9,6 +9,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     protected Button runTest;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         switch (v.getId()) {
             case R.id.runTestButton:
-                //do code for run test button here
+                //code for run test button here
                 break;
         }
     }
