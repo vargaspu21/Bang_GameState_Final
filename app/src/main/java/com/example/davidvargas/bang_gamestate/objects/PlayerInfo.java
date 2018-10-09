@@ -24,7 +24,10 @@ public class PlayerInfo {
     public PlayerInfo(RoleCard role, CharacterCard character)
     {
         health = character.baseHealth;
-        health+=role.healthBonus;
+        if(role.healthBonus)
+        {
+            health++;
+        }
         this.role = role;
         this.character = character;
     }
