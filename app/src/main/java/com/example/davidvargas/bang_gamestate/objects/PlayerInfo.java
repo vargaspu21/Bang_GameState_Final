@@ -1,15 +1,17 @@
 package com.example.davidvargas.bang_gamestate.objects;
 
+import android.graphics.Paint;
+
 import java.util.ArrayList;
 
 public class PlayerInfo {
 
-    private int health;
-    private int maxHealth;
-    private RoleCard role;
-    private CharacterCard character;
-    private ArrayList<PlayableCard> activeCards;
-    private ArrayList<PlayableCard> cardsInHand;
+    protected int health;
+    protected int maxHealth;
+    protected RoleCard role;
+    protected CharacterCard character;
+    protected ArrayList<PlayableCard> activeCards;
+    protected ArrayList<PlayableCard> cardsInHand;
 
     public PlayerInfo()
     {
@@ -28,8 +30,70 @@ public class PlayerInfo {
         {
             health++;
         }
+
+        maxHealth = health;
         this.role = role;
         this.character = character;
+    }
+
+    public int getHealth()
+    {
+        return health;
+    }
+
+    public int getMaxHealth()
+    {
+        return maxHealth;
+    }
+
+    public RoleCard getRole()
+    {
+        return role;
+    }
+
+    public CharacterCard getCharacter()
+    {
+        return character;
+    }
+
+    public ArrayList<PlayableCard> getActiveCards()
+    {
+        return activeCards;
+    }
+
+    public ArrayList<PlayableCard> getCardsInHand()
+    {
+        return cardsInHand;
+    }
+
+    public void setHealth(int health)
+    {
+        this.health = health;
+    }
+
+    public void setMaxHealth(int health)
+    {
+        this.maxHealth = health;
+    }
+
+    public void setRole(RoleCard role)
+    {
+        this.role = role;
+    }
+
+    public void setCharacter(CharacterCard character)
+    {
+        this.character = character;
+    }
+
+    public void setActiveCards(ArrayList<PlayableCard> cards)
+    {
+        activeCards = cards;
+    }
+
+    public void setCardsInHand(ArrayList<PlayableCard> cards)
+    {
+        cardsInHand = cards;
     }
 
 
