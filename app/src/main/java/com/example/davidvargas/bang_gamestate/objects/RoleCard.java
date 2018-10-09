@@ -29,4 +29,6 @@ public class RoleCard extends Card {
     {
         return isVisible;
     }
+
+     
 }
