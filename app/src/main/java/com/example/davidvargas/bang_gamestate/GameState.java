@@ -18,11 +18,15 @@ public class GameState {
 
 
 
-    public void GameState ()
+    public GameState ()
     {
 
     }
 
+    public GameState(GameState s)
+    {
+        
+    }
     //implement a copy constructor
 
 
