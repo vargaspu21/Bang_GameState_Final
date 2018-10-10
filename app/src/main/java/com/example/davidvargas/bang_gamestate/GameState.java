@@ -56,6 +56,11 @@ public class GameState {
         if(!(players[attacker].getActiveCards().contains(0))) return false; //checks that player has BANG card in hand
         players[attacker].setHealth(players[target].health -1); //decreases health of target player
         bangsPlayed++; //increases the count of bangsPlayed by 1
+
+        //following lines change player turn accordingly:
+        if(playerTurn != 4) playerTurn ++;
+        else playerTurn = 1;
+
         return true; //returns true, showing that the move was successful
     }
 
@@ -67,6 +72,11 @@ public class GameState {
         if(players[player].health > players[player].getMaxHealth()) return false; //checks that user does not surpass the max health
         if(!(players[player].getActiveCards().contains(1))) return false; //checks that player has beer card in hand
         players[player].setHealth(players[player].getHealth()+1); //adds one life point to user
+
+        //following lines change player turn accordingly:
+        if(playerTurn != 4) playerTurn ++;
+        else playerTurn = 1;
+        
         return true; //returns true, showing that the move was successful
     }
 
@@ -85,7 +95,7 @@ public class GameState {
 
     }
 
-    //shuffle methof for the drawPile
+    //shuffle method for the drawPile
     public void shuffle()
     {
         Collections.shuffle(drawPile, rand);
