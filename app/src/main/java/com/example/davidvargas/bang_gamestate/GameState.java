@@ -23,7 +23,7 @@ public class GameState extends Card{
     }
 
     //a copy constructor:
-    GameState(GameState gs)
+    public GameState(GameState gs)
     {
         drawPile = gs.drawPile;
         discardPile = gs.discardPile;
@@ -36,11 +36,13 @@ public class GameState extends Card{
 
     public String toString()
     {
-        for(Card c: drawPile) c.toString();
-        for(Card c: discardPile) c.toString();
-        for(PlayerInfo p: players) p.toString();
-        System.out.println("Current player turn: "+playerTurn);
-        System.out.println("BANGs played: "+bangsPlayed);
-        return "hello";
+        String string = "";
+        for(Card c: drawPile) string += c .toString();
+        for(Card c2: discardPile) string += c2.toString();
+        for(PlayerInfo p: players) string += p.toString();
+        string += "Current player turn: "+playerTurn+"\n";
+        string += "BANGs played: "+bangsPlayed+"\n";
+        return string;
+       
     }
 }
