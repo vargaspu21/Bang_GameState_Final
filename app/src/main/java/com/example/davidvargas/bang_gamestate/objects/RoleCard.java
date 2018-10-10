@@ -22,7 +22,7 @@ public class RoleCard extends Card {
         return role;
     }
 
-
+    //toString method:
     public String toString()
     {
         //convert role number to string role:
