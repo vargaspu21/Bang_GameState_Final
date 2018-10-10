@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.runTestButton:
                 //code for run test button here
+                //set hands for every player
+                //player 1 bangs player 2
                 break;
         }
     }

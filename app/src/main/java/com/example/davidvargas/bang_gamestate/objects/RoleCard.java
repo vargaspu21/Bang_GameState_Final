@@ -2,33 +2,33 @@ package com.example.davidvargas.bang_gamestate.objects;
 
 public class RoleCard extends Card {
 
-    protected boolean healthBonus, isVisible;
+    int role; //0: Sheriff, 1: Outlaw, 2: Renegade
 
-    public RoleCard()
+    //constructor:
+    public RoleCard(int roleNum)
     {
-        healthBonus = false;
-        isVisible = false;
+        role = roleNum;
     }
 
-    public void setHealthBonus(boolean healthBonus)
+    //setter method for role
+    public void setRole(int roleNum)
     {
-        this.healthBonus = healthBonus;
+        role = roleNum;
     }
 
-    public void setIsVisible(boolean isVisible)
+    //getter method for role
+    public int getRole()
     {
-        this.isVisible = isVisible;
-    }
-
-    public boolean getHealthBonus()
-    {
-        return healthBonus;
-    }
-
-    public boolean getIsVisible()
-    {
-        return isVisible;
+        return role;
     }
 
 
+    public String toString()
+    {
+        //convert role number to string role:
+        if(role == 0) return "The role is a Sheriff\n";
+        else if(role == 1) return "The role is an Outlaw\n";
+        else return "The role is a Renegade\n";
+
+    }
 }

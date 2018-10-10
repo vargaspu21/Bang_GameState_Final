@@ -2,39 +2,49 @@ package com.example.davidvargas.bang_gamestate.objects;
 
 public class PlayableCard extends Card {
 
-    private boolean isActive; //?not sure what this is...
+    //initializes variables:
+    private boolean isActive; //determines if the card is currently an active blue card
     private int cardNum; //identify effect come switch case
 
+    //constructor
     public PlayableCard()
     {
         isActive = false;
         cardNum = 0;
     }
 
-    public PlayableCard(boolean blue, int num)
+    //constructor that passes in both parameters
+    public PlayableCard(boolean isActive, int cardNum)
     {
-        isActive = blue;
-        cardNum = num;
+        this.isActive = isActive;
+        this.cardNum = cardNum;
     }
 
-    public boolean getActive()
+    //getter method for if card is active
+    public boolean getIsActive()
     {
         return isActive;
     }
 
+    //getter method for card number
     public int getCardNum()
     {
         return cardNum;
     }
 
-    public void playCard()
+    //method for different play cards
+    public boolean playCard()
     {
         switch(cardNum)
         {
-            case 0:
+            case 0: //bang
+                //call bang action
+                //return if succesful or not
                 break;
 
-            case 1:
+            case 1: //beer
+                //call beer action
+                //""
                 break;
 
             case 2:
@@ -93,12 +103,15 @@ public class PlayableCard extends Card {
 
             case 20:
                 break;
+            default:
+                return false;
         }
+        return false;
     }
 
+    //toString method:
     public String toString()
     {
-        super.toString();
-        return "Card number: "+cardNum+"\n"+"Is card active: "+String.valueOf(isActive);
+        return super.toString() + "Card number: "+cardNum+"\n"+"Is card active: "+String.valueOf(isActive)+"\n";
     }
 }
