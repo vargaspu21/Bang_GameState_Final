@@ -95,4 +95,10 @@ public class PlayableCard extends Card {
                 break;
         }
     }
+
+    public String toString()
+    {
+        super.toString();
+        return "Card number: "+cardNum+"\n"+"Is card active: "+String.valueOf(isActive);
+    }
 }

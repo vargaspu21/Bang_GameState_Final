@@ -24,7 +24,7 @@ public class CharacterCard extends Card {
         return baseHealth;
     }
 
-    public int setBaseHealth(int health)
+    public void setBaseHealth(int health)
     {
         baseHealth = health;
     }

@@ -31,6 +31,6 @@ public class Card {
 
     public String toString()
     {
-        return "Name of Card: "+name+"\n"+"Description of Card: "+description+"\n";
+        return "Name of Card: "+name+"\n"+"Description: "+description+"\n";
     }
 }

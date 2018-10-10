@@ -12,35 +12,35 @@ public class GameState extends Card{
     protected int playerTurn, bangsPlayed;
     protected PlayerInfo [] players;
 
-    //stage of the game that it is in
-    //info about the state of resources
-    //info about the resources each player has
-    //info about shared resources: game board, discard pile?
-
-
-    //different class for playing a card
-    //create a class that includes the different card objects?
-
-
 
     public GameState ()
     {
         drawPile = new ArrayList<>();
         discardPile = new ArrayList<>();
         players = new PlayerInfo[4];
+        playerTurn = 0;
         bangsPlayed = 0;
     }
 
-    //implement a copy constructor
-    public GameState(GameState gs)
+    //a copy constructor:
+    GameState(GameState gs)
     {
-
+        drawPile = gs.drawPile;
+        discardPile = gs.discardPile;
+        playerTurn = gs.playerTurn;
+        bangsPlayed = gs.bangsPlayed;
+        players = gs.players;
     }
 
 
 
     public String toString()
     {
+        for(Card c: drawPile) c.toString();
+        for(Card c: discardPile) c.toString();
+        for(PlayerInfo p: players) p.toString();
+        System.out.println("Current player turn: "+playerTurn);
+        System.out.println("BANGs played: "+bangsPlayed);
         return "hello";
     }
 }
