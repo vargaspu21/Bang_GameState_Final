@@ -48,6 +48,7 @@ public class GameState {
         this.bangsPlayed = gs.bangsPlayed;
     }
 
+    
 
     //BANG card function:
     public boolean playBANG(int attacker, int target)
@@ -76,7 +77,7 @@ public class GameState {
         //following lines change player turn accordingly:
         if(playerTurn != 4) playerTurn ++;
         else playerTurn = 1;
-        
+
         return true; //returns true, showing that the move was successful
     }
 

@@ -83,14 +83,14 @@ public class PlayerInfo {
 
     public void setCharacter(CharacterCard character) { this.character = character; } //setter method for player's character
 
-    public void setActiveCards(ArrayList<PlayableCard> cards)
+    public void setActiveCards(PlayableCard c)
     {
-        activeCards = cards;
+        activeCards.add(c);
     } //setter method for list of player's active blue cards
 
-    public void setCardsInHand(ArrayList<PlayableCard> cards)
+    public void setCardsInHand(PlayableCard c)
     {
-        cardsInHand = cards;
+        cardsInHand.add(c);
     } //setter method for list of player's hand
 
     //toString method for Player's Information:
