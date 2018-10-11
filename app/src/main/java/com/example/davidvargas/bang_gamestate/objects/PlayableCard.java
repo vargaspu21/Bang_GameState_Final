@@ -40,6 +40,7 @@ public class PlayableCard extends Card {
             case 0: //bang
                 //call bang action
                 //return if succesful or not
+                //remove card from hand
                 break;
 
             case 1: //beer

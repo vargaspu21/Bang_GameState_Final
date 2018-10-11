@@ -114,12 +114,19 @@ public class GameState {
             else
             {
                 players[player].setActiveCards(c);
+                players[player].getCardsInHand().remove(c);
+                if(playerTurn != 4) playerTurn ++;
+                else playerTurn = 1;
                 return true;
             }
         }
         else {
             c.playCard();
+            players[player].getCardsInHand().remove(c);
+            if(playerTurn != 4) playerTurn ++;
+            else playerTurn = 1;
             return true;
         }
     }
+
 }
