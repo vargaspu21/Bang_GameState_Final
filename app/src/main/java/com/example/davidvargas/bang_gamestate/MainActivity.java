@@ -12,7 +12,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     protected Button runTest;
     protected EditText multiLine;
-    protected GameState gs;
+    protected GameState gs1;
+    protected GameState gs2;
+    protected GameState gs3;
+    protected GameState gs4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +27,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         multiLine = (EditText) findViewById(R.id.multilneEditText);
 
-        gs = new GameState();
+        gs1 = new GameState();
+        gs2 = new GameState();
+        gs3 = new GameState();
+        gs4 = new GameState();
+        
     }
 
     @Override
@@ -41,36 +48,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //set player 4 health to 1
                 PlayableCard bangCard = new PlayableCard(false, 0);
                 PlayableCard beerCard = new PlayableCard(false, 1);
-                gs.players[0].setCardsInHand(bangCard);
-                gs.players[1].setCardsInHand(beerCard);
-                gs.players[2].setCardsInHand(bangCard);
-                gs.players[4].setHealth(1);
+                gs1.players[0].setCardsInHand(bangCard);
+                gs1.players[1].setCardsInHand(beerCard);
+                gs1.players[2].setCardsInHand(bangCard);
+                gs1.players[4].setHealth(1);
 
                 //2)
                 //player 1 draws two cards
                 //player 1 plays a bang card (assume player 2 is selected)
                 //player 1 end turn
-                gs.drawTwo(0);
-                gs.playBANG(0,1);
-                gs.endTurn(0);//not implemented yet if red
+                gs2.drawTwo(0);
+                gs2.playBANG(0,1);
+                gs2.endTurn(0);//not implemented yet if red
 
 
                 //3)
                 //player 2 draws
                 //player 2 plays a beer
                 //player 2 ends turn
-                gs.drawTwo(1);
-                gs.playBeer(1);
-                gs.endTurn(1);
+                gs3.drawTwo(1);
+                gs3.playBeer(1);
+                gs3.endTurn(1);
 
                 //4)
                 //player 3 draws
                 //player 3 plays a bang card (assume player 4 is selected)
                 //(player 4 dies bc only had one health points)
                 //player 3 ends turn
-                gs.drawTwo(2);
-                gs.playBANG(2,3);
-                gs.endTurn(2);
+                gs4.drawTwo(2);
+                gs4.playBANG(2,3);
+                gs4.endTurn(2);
 
 
 
