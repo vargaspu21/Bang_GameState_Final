@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //set player 4 health to 1
                     multiLine.setText("");
                     firstInstance = new GameState();
-                secondInstance = new GameState(firstInstance);
+                    secondInstance = new GameState(firstInstance);
                     multiLine.append("Adding bang card to player 1 hand...\nAdding a beer card to player 2 hand...\n" +
                             "Adding a bang card to player 3 hand...\n");
                     PlayableCard bangCard = new PlayableCard(false, 0);
