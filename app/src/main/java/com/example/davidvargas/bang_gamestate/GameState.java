@@ -24,14 +24,13 @@ public class GameState {
     {
         drawPile = new ArrayList<Card>();
         discardPile = new ArrayList<Card>();
-        //players = {new PlayerInfo(), new PlayerInfo(), new PlayerInfo(), new PlayerInfo()};
-        players = new PlayerInfo[4];
-        players[0] = new PlayerInfo();
+        players = new PlayerInfo[4];//can fit four players max
+        players[0] = new PlayerInfo();//four new players inserted
         players[1] = new PlayerInfo();
         players[2] = new PlayerInfo();
         players[3] = new PlayerInfo();
-        playerTurn = 0;
-        bangsPlayed = 0;
+        playerTurn = 0;//current players turn
+        bangsPlayed = 0;//prevents more than one bang card to be played per turn
         rand.setSeed(System.currentTimeMillis());
         shuffle();
     }
@@ -104,9 +103,9 @@ public class GameState {
     public boolean playBANG(int attacker, int target)
     {
         if(bangsPlayed > 1) return false; //checks that player has not previously played BANG card
-        for(PlayableCard p: players[attacker].getCardsInHand())
+        for(PlayableCard p: players[attacker].getCardsInHand())//iterates through entire hand of player
         {
-            if(p.getCardNum()==0)
+            if(p.getCardNum()==0)//if particular card is the cardnumber for bang, use it
             {
                 players[target].setHealth(players[target].getHealth()-1); //decreases health of target player
                 bangsPlayed++; //increases the count of bangsPlayed by 1
@@ -114,7 +113,7 @@ public class GameState {
                 return true; //returns true, showing that the move was successful
             }
         }
-        return false;
+        return false;//after searching through entire hand, if bang card not found, exits
 
     }
 
@@ -124,15 +123,15 @@ public class GameState {
         //This card lets a player regain one life point - slide the card so that one more bullet is shown.
         // A player cannot gain more life points than his starting amount! The Beer cards cannot be used to help other players.
         if(players[player].health >= players[player].getMaxHealth()) return false; //checks that user does not surpass the max health
-        for(PlayableCard p: players[player].getCardsInHand())
+        for(PlayableCard p: players[player].getCardsInHand())//iterates through entire players hand
         {
-            if(p.getCardNum()==1)
+            if(p.getCardNum()==1)//if cardnum for beer, uses it
             {
                 players[player].setHealth(players[player].getHealth()+1); //adds one life point to user
                 return true; //returns true, showing that the move was successful
             }
         }
-        return false;
+        return false;//else, returns false
 
     }
 
@@ -154,8 +153,7 @@ public class GameState {
     //shuffle method for the drawPile
     public void shuffle()
     {
-        Collections.shuffle(drawPile, rand);
-
+        Collections.shuffle(drawPile, rand);//makes use of collections object to shuffle arraylist
     }
 
     //playing a card
