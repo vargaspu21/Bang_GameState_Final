@@ -106,15 +106,16 @@ public class GameState {
         if(bangsPlayed > 1) return false; //checks that player has not previously played BANG card
         for(PlayableCard p: players[attacker].getCardsInHand())
         {
-            if(!(p.getCardNum()==0))
+            if(p.getCardNum()==0)
             {
-                return false;
+                players[target].setHealth(players[target].getHealth()-1); //decreases health of target player
+                bangsPlayed++; //increases the count of bangsPlayed by 1
+
+                return true; //returns true, showing that the move was successful
             }
         }
-        players[target].setHealth(players[target].getHealth()-1); //decreases health of target player
-        bangsPlayed++; //increases the count of bangsPlayed by 1
+        return false;
 
-        return true; //returns true, showing that the move was successful
     }
 
     //Beer card function:
@@ -122,16 +123,17 @@ public class GameState {
     {
         //This card lets a player regain one life point - slide the card so that one more bullet is shown.
         // A player cannot gain more life points than his starting amount! The Beer cards cannot be used to help other players.
-        if(players[player].health > players[player].getMaxHealth()) return false; //checks that user does not surpass the max health
+        if(players[player].health >= players[player].getMaxHealth()) return false; //checks that user does not surpass the max health
         for(PlayableCard p: players[player].getCardsInHand())
         {
-            if(!(p.getCardNum()==1))
+            if(p.getCardNum()==1)
             {
-                return false;
+                players[player].setHealth(players[player].getHealth()+1); //adds one life point to user
+                return true; //returns true, showing that the move was successful
             }
         }
-        players[player].setHealth(players[player].getHealth()+1); //adds one life point to user
-        return true; //returns true, showing that the move was successful
+        return false;
+
     }
 
     //toString method:
