@@ -80,9 +80,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //player 2 ends turn
                     multiLine.append("Drawing 2 cards for player 2, then playing beer card...\n");
                     multiLine.append("Ending turn...\n");
-                    gs3.drawTwo(1);
-                    gs3.playBeer(1);
-                    gs3.endTurn(1);
+                    secondInstance.drawTwo(1);
+                    secondInstance.playBeer(1);
+                    secondInstance.endTurn(1);
                     multiLine.append("Current game state: \n"+ secondInstance.toString());
 
                     //4)
@@ -94,9 +94,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     multiLine.append("Player 4 dies, no health points remaining\n");
                     multiLine.append("Ending turn...\n");
                     multiLine.setText("");
-                    gs4.drawTwo(2);
-                    gs4.playBANG(2,3);
-                    gs4.endTurn(2);
+                    secondInstance.drawTwo(2);
+                    secondInstance.playBANG(2,3);
+                    secondInstance.endTurn(2);
                     multiLine.append("Current game state: \n"+ secondInstance.toString());
 
                 break;
