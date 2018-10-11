@@ -126,14 +126,14 @@ public class GameState {
     //toString method:
     public String toString()
     {
-        String string = "Draw pile:\n";
-        for(Card c: drawPile) string += c .toString(); //concatenates strings of the draw pile
-        string += "Discard pile:\n";
-        for(Card c: discardPile) string += c.toString(); //concatenates strings of the discard pile
-        string += "Players:\n";
-        for(PlayerInfo p: players) string += p.toString(); //concatenates strings of players
-        string += "Current player turn: "+playerTurn+"\n"; ///concatenates player turn
-        string += "BANGs played: "+bangsPlayed+"\n"; //concatenates current BANGs played
+        String string = "\tDraw pile:\n";
+        for(Card c: drawPile) string += "\t\t" + c.toString(); //concatenates strings of the draw pile
+        string += "\tDiscard pile:\n";
+        for(Card c: discardPile) string += "\t\t" + c.toString(); //concatenates strings of the discard pile
+        string += "\tPlayers:\n";
+        for(PlayerInfo p: players) string += "\t\t" + p.toString(); //concatenates strings of players
+        string += "\tCurrent player turn: "+playerTurn+"\n"; ///concatenates player turn
+        string += "\tBANGs played: "+bangsPlayed+"\n"; //concatenates current BANGs played
         return string;
 
     }
