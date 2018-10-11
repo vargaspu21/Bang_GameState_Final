@@ -16,8 +16,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected EditText multiLine;
     protected GameState firstInstance;
     protected GameState secondInstance;
-    protected GameState gs3;
-    protected GameState gs4;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         multiLine = (EditText) findViewById(R.id.multilneEditText);
 
-        gs1 = new GameState();
-        //gs2 = new GameState();
-        gs3 = new GameState();
-        gs4 = new GameState();
+       
         
     }
 
