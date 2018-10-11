@@ -56,8 +56,8 @@ public class GameState {
     public boolean drawTwo(int player)//draws two cards; player number as identifier
     {
         Random rng = new Random();
-        players[player].setActiveCards(new PlayableCard(false,rng.nextInt(1)));//random card; for now, either bang or beer
-        players[player].setActiveCards(new PlayableCard(false,rng.nextInt(1)));//^
+        players[player].setCardsInHand(new PlayableCard(false,rng.nextInt(1)));//random card; for now, either bang or beer
+        players[player].setCardsInHand(new PlayableCard(false,rng.nextInt(1)));//^
         return true;
     }
 
@@ -104,8 +104,14 @@ public class GameState {
     public boolean playBANG(int attacker, int target)
     {
         if(bangsPlayed > 1) return false; //checks that player has not previously played BANG card
-        if(!(players[attacker].getActiveCards().contains(0))) return false; //checks that player has BANG card in hand
-        players[attacker].setHealth(players[target].health -1); //decreases health of target player
+        for(PlayableCard p: players[attacker].getCardsInHand())
+        {
+            if(!(p.getCardNum()==0))
+            {
+                return false;
+            }
+        }
+        players[target].setHealth(players[target].getHealth()-1); //decreases health of target player
         bangsPlayed++; //increases the count of bangsPlayed by 1
 
         return true; //returns true, showing that the move was successful
@@ -117,9 +123,14 @@ public class GameState {
         //This card lets a player regain one life point - slide the card so that one more bullet is shown.
         // A player cannot gain more life points than his starting amount! The Beer cards cannot be used to help other players.
         if(players[player].health > players[player].getMaxHealth()) return false; //checks that user does not surpass the max health
-        if(!(players[player].getActiveCards().contains(1))) return false; //checks that player has beer card in hand
+        for(PlayableCard p: players[player].getCardsInHand())
+        {
+            if(!(p.getCardNum()==1))
+            {
+                return false;
+            }
+        }
         players[player].setHealth(players[player].getHealth()+1); //adds one life point to user
-
         return true; //returns true, showing that the move was successful
     }
 
@@ -131,9 +142,9 @@ public class GameState {
         string += "\tDiscard pile:\n";
         for(Card c: discardPile) string += "\t\t" + c.toString(); //concatenates strings of the discard pile
         string += "\tPlayers:\n";
-        for(PlayerInfo p: players) string += p.toString(); //concatenates strings of players
-        string += "\tCurrent player turn: "+playerTurn+"\n"; ///concatenates player turn
-        string += "\tBANGs played: "+bangsPlayed+"\n"; //concatenates current BANGs played
+        for(PlayerInfo p: players) string += p.toString() + "\n"; //concatenates strings of players
+        string += "\t\tCurrent player turn: "+playerTurn+"\n"; ///concatenates player turn
+        string += "\t\tBANGs played: "+bangsPlayed+"\n"; //concatenates current BANGs played
         return string;
 
     }
