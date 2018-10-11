@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         multiLine = (EditText) findViewById(R.id.multilneEditText);
 
-       
+
         
     }
 
@@ -53,8 +53,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     firstInstance.players[0].setCardsInHand(bangCard);
                     firstInstance.players[1].setCardsInHand(beerCard);
                     firstInstance.players[2].setCardsInHand(bangCard);
-                    firstInstance.players[4].setHealth(1);
+                    firstInstance.players[3].setHealth(1);
                     multiLine.append("Current game state: \n"+ firstInstance.toString());
+                    multiLine.append("\n******************************************\n");
 
 
 
@@ -68,9 +69,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     secondInstance.playBANG(0,1);
                     secondInstance.endTurn(0);
                     multiLine.append("Current game state: \n"+ secondInstance.toString());
+                    multiLine.append("\n");
 
 
-                    //3)
+
+                //3)
                     //player 2 draws
                     //player 2 plays a beer
                     //player 2 ends turn
@@ -80,8 +83,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     secondInstance.playBeer(1);
                     secondInstance.endTurn(1);
                     multiLine.append("Current game state: \n"+ secondInstance.toString());
+                    multiLine.append("\n");
 
-                    //4)
+
+                //4)
                     //player 3 draws
                     //player 3 plays a bang card (assume player 4 is selected)
                     //(player 4 dies bc only had one health points)
@@ -89,11 +94,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     multiLine.append("Drawing 2 cards for player 3, then playing a bang on player 4..\n");
                     multiLine.append("Player 4 dies, no health points remaining\n");
                     multiLine.append("Ending turn...\n");
-                    multiLine.setText("");
+
                     secondInstance.drawTwo(2);
                     secondInstance.playBANG(2,3);
                     secondInstance.endTurn(2);
                     multiLine.append("Current game state: \n"+ secondInstance.toString());
+                    multiLine.append("\n");
+
 
                 break;
         }

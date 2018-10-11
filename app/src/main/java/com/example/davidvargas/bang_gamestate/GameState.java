@@ -24,7 +24,12 @@ public class GameState {
     {
         drawPile = new ArrayList<Card>();
         discardPile = new ArrayList<Card>();
+        //players = {new PlayerInfo(), new PlayerInfo(), new PlayerInfo(), new PlayerInfo()};
         players = new PlayerInfo[4];
+        players[0] = new PlayerInfo();
+        players[1] = new PlayerInfo();
+        players[2] = new PlayerInfo();
+        players[3] = new PlayerInfo();
         playerTurn = 0;
         bangsPlayed = 0;
         rand.setSeed(System.currentTimeMillis());

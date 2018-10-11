@@ -96,7 +96,7 @@ public class PlayerInfo {
     //toString method for Player's Information:
     public String toString()
     {
-        String s = "Player:\n";
+        String s = "\t\tPlayer:\n";
         s+= "Active Cards:\n";
         for(PlayableCard p: activeCards) s+=p.toString(); //concatenates strings of active cards
         s+= "Cards in hand:\n";
