@@ -159,23 +159,25 @@ public class GameState {
     //playing a card
     public boolean playFromHandAction(int player, PlayableCard c)
     {
+        //check if the player has a card
         if(!(players[player].getCardsInHand().contains(c))) return false;
+        //if this is a blue card
         if(c.getIsActive())
         {
-            //run code for blue cards
+            //check if its a duplicate card
             if(players[player].getActiveCards().contains(c)) return false;
             else
             {
-                players[player].setActiveCards(c);
-                players[player].getCardsInHand().remove(c); //wont remove from the players array list, possibly make remove method in Player info
-                endTurn(player);
+                players[player].setActiveCards(c); //add card to active cards
+                players[player].getCardsInHand().remove(c); //remove card from hand
+                endTurn(player); //end turn
                 return true;
             }
         }
-        else {
-            c.playCard();
-            players[player].getCardsInHand().remove(c);
-            endTurn(player);
+        else { //if it is not a blue card
+            c.playCard(); //play card using method from playable card class
+            players[player].getCardsInHand().remove(c); //remove the card from players hand
+            endTurn(player); //end turn
             return true;
         }
     }
