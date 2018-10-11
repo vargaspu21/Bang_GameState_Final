@@ -100,7 +100,7 @@ public class PlayerInfo {
         s+= "\t\t\tActive Cards:\n";
         for(PlayableCard p: activeCards) s+= "\t\t\t\t" + p.toString(); //concatenates strings of active cards
         s+= "\t\t\tCards in hand:\n";
-        for(PlayableCard p: cardsInHand) s+= "\t\t\t\t" + p.toString(); //concatenates strings of cards in hand
+        for(PlayableCard p: cardsInHand) s+=  p.toString(); //concatenates strings of cards in hand
         s+= "\t\t\tHealth: "+health+"\n"+"\t\t\tMax Health: "+maxHealth+"\n"; //concatenates health and max health strings
         s+= "\t\t\tRole:\n"+role.toString() +"\t\t\tCharacter:\n"+ character.toString(); //concatenates role and character strings
         return s;
