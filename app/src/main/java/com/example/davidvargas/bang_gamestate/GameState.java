@@ -131,7 +131,7 @@ public class GameState {
         string += "\tDiscard pile:\n";
         for(Card c: discardPile) string += "\t\t" + c.toString(); //concatenates strings of the discard pile
         string += "\tPlayers:\n";
-        for(PlayerInfo p: players) string += "\t\t" + p.toString(); //concatenates strings of players
+        for(PlayerInfo p: players) string += p.toString(); //concatenates strings of players
         string += "\tCurrent player turn: "+playerTurn+"\n"; ///concatenates player turn
         string += "\tBANGs played: "+bangsPlayed+"\n"; //concatenates current BANGs played
         return string;
