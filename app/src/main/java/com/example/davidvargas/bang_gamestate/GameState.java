@@ -151,17 +151,15 @@ public class GameState {
             else
             {
                 players[player].setActiveCards(c);
-                players[player].getCardsInHand().remove(c);
-                if(playerTurn != 4) playerTurn ++;
-                else playerTurn = 1;
+                players[player].getCardsInHand().remove(c); //wont remove from the players array list, possibly make remove method in Player info
+                endTurn(player);
                 return true;
             }
         }
         else {
             c.playCard();
             players[player].getCardsInHand().remove(c);
-            if(playerTurn != 4) playerTurn ++;
-            else playerTurn = 1;
+            endTurn(player);
             return true;
         }
     }
