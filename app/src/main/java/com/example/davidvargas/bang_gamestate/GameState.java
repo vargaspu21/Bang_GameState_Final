@@ -48,7 +48,52 @@ public class GameState {
         this.bangsPlayed = gs.bangsPlayed;
     }
 
-    
+    public boolean drawTwo(int player)//draws two cards; player number as identifier
+    {
+        Random rng = new Random();
+        players[player].setActiveCards(new PlayableCard(false,rng.nextInt(1)));//random card; for now, either bang or beer
+        players[player].setActiveCards(new PlayableCard(false,rng.nextInt(1)));//^
+        return true;
+    }
+
+    public boolean endTurn(int player)//ends the turn, determines next player
+    {
+        if(playerTurn != 4) playerTurn ++;
+        else playerTurn = 1;
+        return true;
+    }
+
+    //public boolean useAbility(int player, Ability) //not used yet
+    {
+        //return false;
+    }
+
+    public boolean examineCard(Card card)//prints out card description
+    {
+        System.out.println(card.toString());//for now;prototype
+        return true;
+    }
+
+    public void quitGame()
+    {
+        System.exit(0);//exists program, for now;prototype
+    }
+
+    public boolean discardCard(Card card,int player)
+    {
+        if (players[player].getCardsInHand().contains(card))
+        {
+            players[player].getCardsInHand().remove(card);//delete an instance of card if exists
+            discardPile.add(card);//adds card into discard pile
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
 
     //BANG card function:
     public boolean playBANG(int attacker, int target)
@@ -57,10 +102,6 @@ public class GameState {
         if(!(players[attacker].getActiveCards().contains(0))) return false; //checks that player has BANG card in hand
         players[attacker].setHealth(players[target].health -1); //decreases health of target player
         bangsPlayed++; //increases the count of bangsPlayed by 1
-
-        //following lines change player turn accordingly:
-        if(playerTurn != 4) playerTurn ++;
-        else playerTurn = 1;
 
         return true; //returns true, showing that the move was successful
     }
@@ -73,10 +114,6 @@ public class GameState {
         if(players[player].health > players[player].getMaxHealth()) return false; //checks that user does not surpass the max health
         if(!(players[player].getActiveCards().contains(1))) return false; //checks that player has beer card in hand
         players[player].setHealth(players[player].getHealth()+1); //adds one life point to user
-
-        //following lines change player turn accordingly:
-        if(playerTurn != 4) playerTurn ++;
-        else playerTurn = 1;
 
         return true; //returns true, showing that the move was successful
     }

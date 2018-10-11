@@ -50,18 +50,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //player 1 draws two cards
                 //player 1 plays a bang card (assume player 2 is selected)
                 //player 1 end turn
+                gs.drawTwo(0);
+                gs.playBANG(0,1);
+                gs.endTurn(0);//not implemented yet if red
 
 
                 //3)
                 //player 2 draws
                 //player 2 plays a beer
-                //player 2 ends beer
+                //player 2 ends turn
+                gs.drawTwo(1);
+                gs.playBeer(1);
+                gs.endTurn(1);
 
                 //4)
                 //player 3 draws
                 //player 3 plays a bang card (assume player 4 is selected)
                 //(player 4 dies bc only had one health points)
                 //player 3 ends turn
+                gs.drawTwo(2);
+                gs.playBANG(2,3);
+                gs.endTurn(2);
 
 
 
