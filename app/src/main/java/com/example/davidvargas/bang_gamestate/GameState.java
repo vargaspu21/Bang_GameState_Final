@@ -102,4 +102,24 @@ public class GameState {
         Collections.shuffle(drawPile, rand);
 
     }
+
+    //playing a card
+    public boolean playFromHandAction(int player, PlayableCard c)
+    {
+        if(!(players[player].getCardsInHand().contains(c))) return false;
+        if(c.getIsActive())
+        {
+            //run code for blue cards
+            if(players[player].getActiveCards().contains(c)) return false;
+            else
+            {
+                players[player].setActiveCards(c);
+                return true;
+            }
+        }
+        else {
+            c.playCard();
+            return true;
+        }
+    }
 }
