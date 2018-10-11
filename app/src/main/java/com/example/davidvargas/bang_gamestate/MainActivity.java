@@ -14,8 +14,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     protected Button runTest;
     protected EditText multiLine;
-    protected GameState gs1;
-    protected GameState gs2;
+    protected GameState firstInstance;
+    protected GameState secondInstance;
     protected GameState gs3;
     protected GameState gs4;
 
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         multiLine = (EditText) findViewById(R.id.multilneEditText);
 
         gs1 = new GameState();
-        gs2 = new GameState();
+        //gs2 = new GameState();
         gs3 = new GameState();
         gs4 = new GameState();
         
@@ -39,59 +39,66 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v)
     {
-        Random rand = new Random();
-        int i = rand.nextInt(4) +1 ;
         switch (v.getId()) {
             case R.id.runTestButton:
-            switch(i){
-                case 1:
+
                     //1):
                     //add a bang card to player 1 hand
                     //add a beer card to player 2 hand
                     //add a bang card to player 3 hand
                     //set player 4 health to 1
                     multiLine.setText("");
+                    firstInstance = new GameState();
+                secondInstance = new GameState(firstInstance);
+                    multiLine.append("Adding bang card to player 1 hand...\nAdding a beer card to player 2 hand...\n" +
+                            "Adding a bang card to player 3 hand...\n");
                     PlayableCard bangCard = new PlayableCard(false, 0);
                     PlayableCard beerCard = new PlayableCard(false, 1);
-                    gs1.players[0].setCardsInHand(bangCard);
-                    gs1.players[1].setCardsInHand(beerCard);
-                    gs1.players[2].setCardsInHand(bangCard);
-                    gs1.players[4].setHealth(1);
-                    break;
-                case 2:
+                    firstInstance.players[0].setCardsInHand(bangCard);
+                    firstInstance.players[1].setCardsInHand(beerCard);
+                    firstInstance.players[2].setCardsInHand(bangCard);
+                    firstInstance.players[4].setHealth(1);
+                    multiLine.append("Current game state: \n"+ firstInstance.toString());
+
+
+
                     //2)
                     //player 1 draws two cards
                     //player 1 plays a bang card (assume player 2 is selected)
                     //player 1 end turn
-                    multiLine.setText("");
-                    gs2.drawTwo(0);
-                    gs2.playBANG(0,1);
-                    gs2.endTurn(0);//not implemented yet if red
-                    break;
-                case 3:
+                    multiLine.append("Drawing 2 cards for player 1, then playing a bang on player 2...\n");
+                    multiLine.append("Ending turn...\n");
+                    secondInstance.drawTwo(0);
+                    secondInstance.playBANG(0,1);
+                    secondInstance.endTurn(0);
+                    multiLine.append("Current game state: \n"+ secondInstance.toString());
+
+
                     //3)
                     //player 2 draws
                     //player 2 plays a beer
                     //player 2 ends turn
-                    multiLine.setText("");
+                    multiLine.append("Drawing 2 cards for player 2, then playing beer card...\n");
+                    multiLine.append("Ending turn...\n");
                     gs3.drawTwo(1);
                     gs3.playBeer(1);
                     gs3.endTurn(1);
-                    break;
-                case 4:
+                    multiLine.append("Current game state: \n"+ secondInstance.toString());
+
                     //4)
                     //player 3 draws
                     //player 3 plays a bang card (assume player 4 is selected)
                     //(player 4 dies bc only had one health points)
                     //player 3 ends turn
+                    multiLine.append("Drawing 2 cards for player 3, then playing a bang on player 4..\n");
+                    multiLine.append("Player 4 dies, no health points remaining\n");
+                    multiLine.append("Ending turn...\n");
                     multiLine.setText("");
                     gs4.drawTwo(2);
                     gs4.playBANG(2,3);
                     gs4.endTurn(2);
-                    break;
+                    multiLine.append("Current game state: \n"+ secondInstance.toString());
 
-
-            }
                 break;
         }
     }

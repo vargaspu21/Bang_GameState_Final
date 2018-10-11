@@ -63,9 +63,9 @@ public class GameState {
         return true;
     }
 
-    //public boolean useAbility(int player, Ability) //not used yet
+    public boolean useAbility(int player, int Ability) //not used yet
     {
-        //return false;
+        return true;
     }
 
     public boolean examineCard(Card card)//prints out card description
