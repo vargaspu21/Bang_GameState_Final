@@ -23,10 +23,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        runTest = (Button) findViewById(R.id.runTestButton);
-        runTest.setOnClickListener(this);
+        runTest = (Button) findViewById(R.id.runTestButton); //creates the instance of the run test button
+        runTest.setOnClickListener(this); //sets the listener for the run test button
 
-        multiLine = (EditText) findViewById(R.id.multilneEditText);
+        multiLine = (EditText) findViewById(R.id.multilneEditText); //creates the instance of the multiline edit text
 
 
         
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.runTestButton:
 
-                    //1):
+                    //1)
                     //add a bang card to player 1 hand
                     //add a beer card to player 2 hand
                     //add a bang card to player 3 hand
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     secondInstance.playBANG(0,1);
                     secondInstance.endTurn(0);
                     multiLine.append("Current game state: \n"+ secondInstance.toString());
-                    multiLine.append("\n");
+                    multiLine.append("\n******************************************\n");
 
 
 
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     secondInstance.playBeer(1);
                     secondInstance.endTurn(1);
                     multiLine.append("Current game state: \n"+ secondInstance.toString());
-                    multiLine.append("\n");
+                    multiLine.append("\n******************************************\n");
 
 
                 //4)
@@ -94,12 +94,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     multiLine.append("Drawing 2 cards for player 3, then playing a bang on player 4..\n");
                     multiLine.append("Player 4 dies, no health points remaining\n");
                     multiLine.append("Ending turn...\n");
-
                     secondInstance.drawTwo(2);
                     secondInstance.playBANG(2,3);
                     secondInstance.endTurn(2);
                     multiLine.append("Current game state: \n"+ secondInstance.toString());
-                    multiLine.append("\n");
+                    multiLine.append("\n******************************************\n");
 
 
                 break;
