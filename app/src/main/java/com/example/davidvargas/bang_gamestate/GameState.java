@@ -54,9 +54,24 @@ public class GameState {
 
     public boolean drawTwo(int player)//draws two cards; player number as identifier
     {
+        if(playerTurn != player)//if not their turn, leave
+        {
+            return false;
+        }
         Random rng = new Random();
         players[player].setCardsInHand(new PlayableCard(false,rng.nextInt(1)));//random card; for now, either bang or beer
         players[player].setCardsInHand(new PlayableCard(false,rng.nextInt(1)));//^
+        return true;
+    }
+
+    public boolean draw(int player)//for singledraw - added 10/21/18
+    {
+        if(playerTurn != player)
+        {
+            return false;
+        }
+        Random rng = new Random();
+        players[player].setCardsInHand(new PlayableCard(false,rng.nextInt(1)));//random card; for now, either bang or beer
         return true;
     }
 
@@ -67,9 +82,225 @@ public class GameState {
         return true;
     }
 
-    public boolean useAbility(int player, int Ability) //not used yet
+    public boolean useAbility(int player, int ability) //added 10/21/18
     {
-        return true;
+        if(playerTurn != player)
+        {
+            return false;
+        }
+        else
+        {
+            switch(ability) {
+                case 0: //paul regret - +1 distance seen
+                    players[player].setDistance(players[player].getDistance() + 1);
+                    return true;
+
+                case 1: //jourdonnais - if draw heart when BANG'd, MISS'd
+                    draw(player);
+                    //IMPLEMENT - check last card they drew
+
+                case 2: //black jack - shows second card drawn, if heart or diamond, draws another card
+                    drawTwo(player);
+                    //IMPLEMENT - check second card drawn
+                    draw(player); //draws additional card if if() triggers
+
+                case 3: //slab the killer - other player needs 2 misses to cancel bang from him
+                    //IMPLEMENT - will probably trigger this in the middle of battle
+
+                case 4: //el gringo - anytime hit, draws card from player
+                    //IMPLEMENT - will probably trigger right after taking damage
+
+                case 5: //jesse jones - draw first card from selected players hand
+                    //IMPLEMENT - will trigger in drawTwo
+
+                case 6: //suzy lafayette - soon as there are no cards in hand, draws new one
+                    if (players[player].getActiveCards().isEmpty()) {
+                        draw(player);
+                    }
+                    return true;
+
+                case 7: //willy the kid - can play any number of bangs
+                    //IMPLEMENT - will trigger in battle
+
+                case 8: //rose doolan - sees all players distance -1, PROBLEM - this sets this application to everyone, maybe add a distance to playerinfo instead?
+                    if (player == 0) {
+                        players[1].setDistance(-1);
+                        players[2].setDistance(-1);
+                        players[3].setDistance(-1);
+                        return true;
+                    } else if (player == 1) {
+                        players[0].setDistance(-1);
+                        players[2].setDistance(-1);
+                        players[3].setDistance(-1);
+                        return true;
+                    } else if (player == 2) {
+                        players[0].setDistance(-1);
+                        players[1].setDistance(-1);
+                        players[3].setDistance(-1);
+                        return true;
+                    } else if (player == 3) {
+                        players[0].setDistance(-1);
+                        players[1].setDistance(-1);
+                        players[2].setDistance(-1);
+                        return true;
+                    } else {
+                        return false;
+                    }
+
+                case 9: //bart cassidy - each time hit, draws a card
+                    //IMPLEMENT - after damage taken in battle
+
+                case 10: //pedro ramiree - draws first card from discard pile
+                    //IMPLEMENT - during drawing phase
+
+                case 11: //sid ketchum -  can discard 2 cards to regain one life
+                    //IMPLEMENT - discard two cards
+                    players[player].setHealth(players[player].getHealth()+1);
+                    return true;
+
+                case 12: //lucky duke - anytime draws, flips first two cards up and chooses one
+                    //IMPLEMENT - new draw system for him
+
+                case 13: //vulture sam - whenever player eliminated, take all their cards
+                    //IMPLEMENT - when player health 0, activate
+
+                case 14: //calamity janet - play bangs as miss and vice versa
+                    //IMPLEMENT - during battle phase
+
+                case 15: //kit carlson - looks at top three and draws two if drawTwo
+                    //IMPLEMENT - during draw phase
+
+                default:
+                    return false;
+            }
+        }
+    }
+
+    public boolean playCard(int player, int cardNum)//will be the cases in playableCard; cases should be handled here because this is the main gamestate
+    {
+        if(playerTurn != player)
+        {
+            return false;
+        }
+        else
+        {
+            switch(cardNum)
+            {
+                case 0: //schofield, +2 range
+                    //we can either do weapons like rose doolan character, or add a new int called range to playerinfo
+
+                case 1: //rev carabine, +4 range
+
+                case 2: //winchester, +5 range
+
+                case 3: //volcanic, +1 range, play any number of bangs
+                    //second effect apply during battle phase
+
+                case 4: //remington, +3 range
+
+                case 5: //bang
+                    //put playBang fn in here
+
+                case 6: //missed!
+                    //cannot be used without replying to a bang
+                    //can be implemented multiple ways, can have a separate fn
+                    return false; //false for now?
+
+                case 7: //beer, heals a health
+                    //put playBeer fn in here
+
+                case 8: //panic!
+                    //player in 1 range gives up a card
+
+                case 9: //cat balou
+                    //one player discards a card
+
+                case 10: //stagecoach
+                    //draw two cards
+
+                case 11: //wells fargo
+                    //draw three cards
+
+                case 12: //gatling
+                    //all other players lose one health
+                    //copy rose doolans effect
+                    if (player == 0) {
+                        players[1].setHealth(players[1].getHealth()-1);
+                        players[2].setHealth(players[2].getHealth()-1);
+                        players[3].setHealth(players[3].getHealth()-1);
+                        return true;
+                    } else if (player == 1) {
+                        players[0].setHealth(players[0].getHealth()-1);
+                        players[2].setHealth(players[2].getHealth()-1);
+                        players[3].setHealth(players[3].getHealth()-1);
+                        return true;
+                    } else if (player == 2) {
+                        players[0].setHealth(players[0].getHealth()-1);
+                        players[1].setHealth(players[1].getHealth()-1);
+                        players[3].setHealth(players[3].getHealth()-1);
+                        return true;
+                    } else if (player == 3) {
+                        players[0].setHealth(players[0].getHealth()-1);
+                        players[1].setHealth(players[1].getHealth()-1);
+                        players[2].setHealth(players[2].getHealth()-1);
+                        return true;
+                    } else {
+                        return false;
+                    }
+
+                case 13: //duel
+                    //back-and-forth with selected player
+
+                case 14: //indians, all players discard bang or lose a life
+                    //automatic for now
+                    //check players entire hands for a bang. discard if found. dont lose a life.
+
+                case 15: //general store, reveal number of cards as players from deck, each choose one
+
+                case 16: //saloon, player +2 health, others +1 health
+                    if (player == 0) {
+                        players[0].setHealth(players[0].getHealth()+2);
+                        players[1].setHealth(players[1].getHealth()+1);
+                        players[2].setHealth(players[2].getHealth()+1);
+                        players[3].setHealth(players[3].getHealth()+1);
+                        return true;
+                    } else if (player == 1) {
+                        players[0].setHealth(players[0].getHealth()+1);
+                        players[1].setHealth(players[1].getHealth()+2);
+                        players[2].setHealth(players[2].getHealth()+1);
+                        players[3].setHealth(players[3].getHealth()+1);
+                        return true;
+                    } else if (player == 2) {
+                        players[0].setHealth(players[0].getHealth()+1);
+                        players[1].setHealth(players[1].getHealth()+1);
+                        players[2].setHealth(players[2].getHealth()+2);
+                        players[3].setHealth(players[3].getHealth()+1);
+                        return true;
+                    } else if (player == 3) {
+                        players[0].setHealth(players[0].getHealth()+1);
+                        players[1].setHealth(players[1].getHealth()+1);
+                        players[2].setHealth(players[2].getHealth()+1);
+                        players[3].setHealth(players[3].getHealth()+2);
+                        return true;
+                    } else {
+                        return false;
+                    }
+
+                case 17: //jail
+
+                case 18: //dynamite
+
+                case 19: //barrel
+
+                case 20: //scope, you see others -1 distance
+
+                case 21: //mustang, people see you +1 distance
+
+                default:
+                    return false;
+
+            }
+        }
     }
 
     public boolean examineCard(Card card)//prints out card description

@@ -45,7 +45,7 @@ public class CharacterCard extends Card {
     }
 
     //method for the different abilities
-    public boolean ability()
+    public void ability()//i applied all the cases inside gameState. I think that's where they should be
     {
         switch(ability)
         {
@@ -53,6 +53,7 @@ public class CharacterCard extends Card {
                 break;
 
             case 1:
+
                 break;
 
             case 2:
@@ -111,10 +112,11 @@ public class CharacterCard extends Card {
 
             case 20:
                 break;
+
             default:
-                return false;
+                return;
         }
-        return false;
+        return;
     }
 
 
