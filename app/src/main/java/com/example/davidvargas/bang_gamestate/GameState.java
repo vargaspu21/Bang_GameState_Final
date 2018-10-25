@@ -41,7 +41,7 @@ public class GameState {
     public final int PANIC = 8;
     public final int CATBALOU = 9;
     public final int STAGECOACH = 10;
-    public final int WELLSCARGO = 11;
+    public final int WELLSFARGO = 11;
     public final int GATLING = 12;
     public final int DUEL = 13;
     public final int INDIANS = 14;
@@ -53,18 +53,34 @@ public class GameState {
     public final int SCOPE = 20;
     public final int MUSTANG = 21;
 
+    public final int NUMSCHOFIELD = 3;
+    public final int NUMVOLCANIC = 2;
+    public final int NUMBANG = 25;
+    public final int NUMMISSED = 12;
+    public final int NUMBEER = 6;
+    public final int NUMPANIC = 4;
+    public final int NUMCATBALOU = 4;
+    public final int NUMSTAGECOACH = 2;
+    public final int NUMDUEL = 3;
+    public final int NUMINDIANS = 2;
+    public final int NUMGENERALSTORE = 2;
+    public final int NUMJAIL = 3;
+    public final int NUMBARREL = 2;
+    public final int NUMMUSTANG = 2;
+
     //initializes variables:
-    protected ArrayList <Card> drawPile;
-    protected ArrayList <Card> discardPile;
+    protected ArrayList <PlayableCard> drawPile;
+    protected ArrayList <PlayableCard> discardPile;
     protected int playerTurn, bangsPlayed;
     protected PlayerInfo [] players;
     public static Random rand = new Random ();
 
-    //constructor for GameState:
+    //constructor for gameState, used to make a new one
     public GameState ()
     {
-        drawPile = new ArrayList<Card>();
-        discardPile = new ArrayList<Card>();
+        drawPile = new ArrayList<PlayableCard>();
+        drawPile = initDeck(drawPile);
+        discardPile = new ArrayList<PlayableCard>();
         players = new PlayerInfo[4];//can fit four players max
         players[0] = new PlayerInfo();//four new players inserted
         players[1] = new PlayerInfo();
@@ -73,24 +89,51 @@ public class GameState {
         playerTurn = 0;//current players turn
         bangsPlayed = 0;//prevents more than one bang card to be played per turn
         rand.setSeed(System.currentTimeMillis());
-        shuffle();
     }
 
-    //a copy constructor:
+    //copy constructor - used to replicate two gameStates
     public GameState(GameState gs)
     {
         //creates a deep copy of each card in the array list:
-        drawPile = new ArrayList<Card>();
-        for(Card c: gs.drawPile) this.drawPile.add(c);
+        drawPile = new ArrayList<PlayableCard>();
+        for(PlayableCard c: gs.drawPile) this.drawPile.add(c);
         //creates a deep copy of each card in the array list:
-        discardPile = new ArrayList<Card>();
-        for(Card c: gs.discardPile) this.discardPile.add(c);
+        discardPile = new ArrayList<PlayableCard>();
+        for(PlayableCard c: gs.discardPile) this.discardPile.add(c);
         ////creates a deep copy of each card in the array:
         players = new PlayerInfo[4];
-        for(int i = 0; i< players.length; i++) this.players[i]= gs.players[i];
-
+        for(int i = 0; i< players.length; i++) this.players[i] = gs.players[i];
         this.playerTurn = gs.playerTurn;
         this.bangsPlayed = gs.bangsPlayed;
+    }
+
+    public ArrayList<PlayableCard> initDeck(ArrayList<PlayableCard> deck)//adds all 80 cards of deck
+    {
+        int i = 0;
+        for(i=0; i<NUMSCHOFIELD; i++) deck.add(new PlayableCard(true, SCHOFIELD));
+        deck.add(new PlayableCard(true, REVCARBINE));
+        deck.add(new PlayableCard(true, WINCHESTER));
+        for(i=0; i<NUMVOLCANIC; i++) deck.add(new PlayableCard(true, VOLCANIC));
+        deck.add(new PlayableCard(true, REMINGTON));
+        for(i=0; i<NUMBANG; i++) deck.add(new PlayableCard(false, BANG));
+        for(i=0; i<NUMMISSED; i++) deck.add(new PlayableCard(false, MISSED));
+        for(i=0; i<NUMBEER; i++) deck.add(new PlayableCard(false, BEER));
+        for(i=0; i<NUMPANIC; i++) deck.add(new PlayableCard(false, PANIC));
+        for(i=0; i<NUMCATBALOU; i++) deck.add(new PlayableCard(false, CATBALOU));
+        for(i=0; i<NUMSTAGECOACH; i++) deck.add(new PlayableCard(false, STAGECOACH));
+        deck.add(new PlayableCard(false, WELLSFARGO));
+        deck.add(new PlayableCard(false, GATLING));
+        for(i=0; i<NUMDUEL; i++) deck.add(new PlayableCard(false, DUEL));
+        for(i=0; i<NUMINDIANS; i++) deck.add(new PlayableCard(false, INDIANS));
+        for(i=0; i<NUMGENERALSTORE; i++) deck.add(new PlayableCard(false, GENERALSTORE));
+        deck.add(new PlayableCard(false, SALOON));
+        for(i=0; i<NUMJAIL; i++) deck.add(new PlayableCard(true, JAIL));
+        deck.add(new PlayableCard(true, DYNAMITE));
+        for(i=0; i<NUMBARREL; i++) deck.add(new PlayableCard(true, BARREL));
+        deck.add(new PlayableCard(true, SCOPE));
+        for(i=0; i<NUMMUSTANG; i++) deck.add(new PlayableCard(true, MUSTANG));
+        shuffle();
+        return deck;
     }
 
     public boolean drawTwo(int player)//draws two cards; player number as identifier
@@ -99,11 +142,12 @@ public class GameState {
         {
             return false;
         }
-        Random rng = new Random();
-        players[player].setCardsInHand(new PlayableCard(false,rng.nextInt(1)));//random card; for now, either bang or beer
-        players[player].setCardsInHand(new PlayableCard(false,rng.nextInt(1)));//^
-        discardIntoDraw(this.discardPile);
-        return true;
+        else
+        {
+            draw(player);//calls draw two  times
+            draw(player);
+            return true;
+        }
     }
 
     public boolean draw(int player)//for singledraw - added 10/21/18
@@ -112,9 +156,14 @@ public class GameState {
         {
             return false;
         }
-        Random rng = new Random();
-        players[player].setCardsInHand(new PlayableCard(false,rng.nextInt(1)));//random card; for now, either bang or beer
-        return true;
+        else
+        {
+            discardIntoDraw(drawPile);
+            PlayableCard toDraw = drawPile.get(0);//gets topmost card
+            players[player].setCardsInHand(toDraw);//adds topmost card to player's hand
+            drawPile.remove(toDraw);//deletes the first instance of the card from drawpile
+            return true;
+        }
     }
 
     public boolean endTurn(int player)//ends the turn, determines next player
@@ -356,7 +405,7 @@ public class GameState {
         System.exit(0);//exists program, for now;prototype
     }
 
-    public boolean discardCard(Card card,int player)
+    public boolean discardCard(PlayableCard card,int player)
     {
         if (players[player].getCardsInHand().contains(card))
         {
@@ -456,9 +505,9 @@ public class GameState {
     }
 
 
-    public boolean discardIntoDraw(ArrayList<Card> discardPile){
+    public boolean discardIntoDraw(ArrayList<PlayableCard> discardPile){
         if(this.drawPile.isEmpty()){
-            for(Card c: discardPile){
+            for(PlayableCard c: discardPile){
                 drawPile.add(c);
             }
             return true;
