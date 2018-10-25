@@ -456,12 +456,14 @@ public class GameState {
     }
 
 
-    public void discardIntoDraw(ArrayList<Card> discardPile){
+    public boolean discardIntoDraw(ArrayList<Card> discardPile){
         if(this.drawPile.isEmpty()){
             for(Card c: discardPile){
                 drawPile.add(c);
             }
+            return true;
         }
+        return false;
     }
 
 }
