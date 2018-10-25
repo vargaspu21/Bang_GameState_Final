@@ -53,7 +53,6 @@ public class CharacterCard extends Card {
                 break;
 
             case 1:
-
                 break;
 
             case 2:

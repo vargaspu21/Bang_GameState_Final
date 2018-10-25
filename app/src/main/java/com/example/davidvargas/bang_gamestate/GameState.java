@@ -11,6 +11,47 @@ import java.util.Collections;
 import java.util.Random;
 
 public class GameState {
+    //Character Card Constants
+    public final int PAULREGRET = 0;
+    public final int JOURDONNAIS = 1;
+    public final int BLACKJACK = 2;
+    public final int SLABTHEKILLER = 3;
+    public final int ELGRINGO = 4;
+    public final int JESSEJONES = 5;
+    public final int SUZYLAFAYETTE = 6;
+    public final int WILLYTHEKID = 7;
+    public final int ROSEDOOLAN = 8;
+    public final int BARTCASSIDY = 9;
+    public final int PEDRORAMIREZ = 10;
+    public final int SIDKETCHUM = 11;
+    public final int LUCKYDUKE = 12;
+    public final int VULTURESAM = 13;
+    public final int CALAMITYJANET = 14;
+    public final int KITCARLSON = 15;
+
+    //Playable Card Constants
+    public final int SCHOFIELD = 0;
+    public final int REVCARBINE = 1;
+    public final int WINCHESTER = 2;
+    public final int VOLCANIC = 3;
+    public final int REMINGTON = 4;
+    public final int BANG = 5;
+    public final int MISSED = 6;
+    public final int BEER = 7;
+    public final int PANIC = 8;
+    public final int CATBALOU = 9;
+    public final int STAGECOACH = 10;
+    public final int WELLSCARGO = 11;
+    public final int GATLING = 12;
+    public final int DUEL = 13;
+    public final int INDIANS = 14;
+    public final int GENERALSTORE = 15;
+    public final int SALOON = 16;
+    public final int JAIL = 17;
+    public final int DYNAMITE = 18;
+    public final int BARREL = 19;
+    public final int SCOPE = 20;
+    public final int MUSTANG = 21;
 
     //initializes variables:
     protected ArrayList <Card> drawPile;
