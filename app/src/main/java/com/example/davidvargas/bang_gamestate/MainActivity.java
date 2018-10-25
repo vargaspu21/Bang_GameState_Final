@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     multiLine.setText("");
                     firstInstance = new GameState();
                     secondInstance = new GameState(firstInstance);
+                multiLine.append("FIRST INSTANCE: \n");
                     multiLine.append("Adding bang card to player 1 hand...\nAdding a beer card to player 2 hand...\n" +
                             "Adding a bang card to player 3 hand...\n");
                     PlayableCard bangCard = new PlayableCard(false, 0);
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //player 1 draws two cards
                     //player 1 plays a bang card (assume player 2 is selected)
                     //player 1 end turn
+                    multiLine.append("SECOND INSTANCE: \n");
                     multiLine.append("Drawing 2 cards for player 1, then playing a bang on player 2...\n");
                     multiLine.append("Ending turn...\n");
                     secondInstance.drawTwo(0);
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //player 2 draws
                     //player 2 plays a beer
                     //player 2 ends turn
+                    multiLine.append("THIRD INSTANCE: \n");
                     multiLine.append("Drawing 2 cards for player 2, then playing beer card...\n");
                     multiLine.append("Ending turn...\n");
                     secondInstance.drawTwo(1);
@@ -91,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //player 3 plays a bang card (assume player 4 is selected)
                     //(player 4 dies bc only had one health points)
                     //player 3 ends turn
+                    multiLine.append("FOURTH INSTANCE: \n");
                     multiLine.append("Drawing 2 cards for player 3, then playing a bang on player 4..\n");
                     multiLine.append("Player 4 dies, no health points remaining\n");
                     multiLine.append("Ending turn...\n");

@@ -53,6 +53,7 @@ public class GameState {
     public final int SCOPE = 20;
     public final int MUSTANG = 21;
 
+    //Amount of cards in starting deck constants
     public final int NUMSCHOFIELD = 3;
     public final int NUMVOLCANIC = 2;
     public final int NUMBANG = 25;
@@ -109,7 +110,7 @@ public class GameState {
 
     public ArrayList<PlayableCard> initDeck(ArrayList<PlayableCard> deck)//adds all 80 cards of deck
     {
-        int i = 0;
+        int i;
         for(i=0; i<NUMSCHOFIELD; i++) deck.add(new PlayableCard(true, SCHOFIELD));
         deck.add(new PlayableCard(true, REVCARBINE));
         deck.add(new PlayableCard(true, WINCHESTER));
@@ -144,7 +145,7 @@ public class GameState {
         }
         else
         {
-            draw(player);//calls draw two  times
+            draw(player);//calls draw twice
             draw(player);
             return true;
         }
