@@ -159,7 +159,7 @@ public class GameState {
         }
         else
         {
-            discardIntoDraw(drawPile);
+            discardIntoDraw(drawPile);//checks if drawpile is empty. if it is, turns discardpile into drawpile
             PlayableCard toDraw = drawPile.get(0);//gets topmost card
             players[player].setCardsInHand(toDraw);//adds topmost card to player's hand
             drawPile.remove(toDraw);//deletes the first instance of the card from drawpile
@@ -183,38 +183,40 @@ public class GameState {
         else
         {
             switch(ability) {
-                case 0: //paul regret - +1 distance seen
+                case PAULREGRET: //paul regret - +1 distance seen
                     players[player].setDistance(players[player].getDistance() + 1);
                     return true;
 
-                case 1: //jourdonnais - if draw heart when BANG'd, MISS'd
+                case JOURDONNAIS: //jourdonnais - if draw heart when BANG'd, MISS'd
                     draw(player);
                     //IMPLEMENT - check last card they drew
+                    //CHARACTER ABILITY SKIPPED DUE TO SUIT/NUMBER COMPLEXITY
 
-                case 2: //black jack - shows second card drawn, if heart or diamond, draws another card
+                case BLACKJACK: //black jack - shows second card drawn, if heart or diamond, draws another card
                     drawTwo(player);
                     //IMPLEMENT - check second card drawn
+                    //CHARACTER ABILITY SKIPPED DUE TO SUIT/NUMBER COMPLEXITY
                     draw(player); //draws additional card if if() triggers
 
-                case 3: //slab the killer - other player needs 2 misses to cancel bang from him
+                case SLABTHEKILLER: //slab the killer - other player needs 2 misses to cancel bang from him
                     //IMPLEMENT - will probably trigger this in the middle of battle
 
-                case 4: //el gringo - anytime hit, draws card from player
+                case ELGRINGO: //el gringo - anytime hit, draws card from player
                     //IMPLEMENT - will probably trigger right after taking damage
 
-                case 5: //jesse jones - draw first card from selected players hand
+                case JESSEJONES: //jesse jones - draw first card from selected players hand
                     //IMPLEMENT - will trigger in drawTwo
 
-                case 6: //suzy lafayette - soon as there are no cards in hand, draws new one
+                case SUZYLAFAYETTE: //suzy lafayette - soon as there are no cards in hand, draws new one
                     if (players[player].getActiveCards().isEmpty()) {
                         draw(player);
                     }
                     return true;
 
-                case 7: //willy the kid - can play any number of bangs
+                case WILLYTHEKID: //willy the kid - can play any number of bangs
                     //IMPLEMENT - will trigger in battle
 
-                case 8: //rose doolan - sees all players distance -1, PROBLEM - this sets this application to everyone, maybe add a distance to playerinfo instead?
+                case ROSEDOOLAN: //rose doolan - sees all players distance -1, PROBLEM - this sets this application to everyone, maybe add a distance to playerinfo instead?
                     if (player == 0) {
                         players[1].setDistance(-1);
                         players[2].setDistance(-1);
@@ -239,27 +241,27 @@ public class GameState {
                         return false;
                     }
 
-                case 9: //bart cassidy - each time hit, draws a card
+                case BARTCASSIDY: //bart cassidy - each time hit, draws a card
                     //IMPLEMENT - after damage taken in battle
 
-                case 10: //pedro ramiree - draws first card from discard pile
+                case PEDRORAMIREZ: //pedro ramiree - draws first card from discard pile
                     //IMPLEMENT - during drawing phase
 
-                case 11: //sid ketchum -  can discard 2 cards to regain one life
+                case SIDKETCHUM: //sid ketchum -  can discard 2 cards to regain one life
                     //IMPLEMENT - discard two cards
                     players[player].setHealth(players[player].getHealth()+1);
                     return true;
 
-                case 12: //lucky duke - anytime draws, flips first two cards up and chooses one
+                case LUCKYDUKE: //lucky duke - anytime draws, flips first two cards up and chooses one
                     //IMPLEMENT - new draw system for him
 
-                case 13: //vulture sam - whenever player eliminated, take all their cards
+                case VULTURESAM: //vulture sam - whenever player eliminated, take all their cards
                     //IMPLEMENT - when player health 0, activate
 
-                case 14: //calamity janet - play bangs as miss and vice versa
+                case CALAMITYJANET: //calamity janet - play bangs as miss and vice versa
                     //IMPLEMENT - during battle phase
 
-                case 15: //kit carlson - looks at top three and draws two if drawTwo
+                case KITCARLSON: //kit carlson - looks at top three and draws two if drawTwo
                     //IMPLEMENT - during draw phase
 
                 default:
@@ -268,7 +270,7 @@ public class GameState {
         }
     }
 
-    public boolean playCard(int player, int cardNum)//will be the cases in playableCard; cases should be handled here because this is the main gamestate
+    public boolean playCard(int player, int target, int cardNum)//will be the cases in playableCard; cases should be handled here because this is the main gamestate
     {
         if(playerTurn != player)
         {
@@ -291,7 +293,7 @@ public class GameState {
                 case 4: //remington, +3 range
 
                 case 5: //bang
-                    //put playBang fn in here
+                    playBANG(player,target);
 
                 case 6: //missed!
                     //cannot be used without replying to a bang
@@ -299,7 +301,7 @@ public class GameState {
                     return false; //false for now?
 
                 case 7: //beer, heals a health
-                    //put playBeer fn in here
+                    playBeer(player);
 
                 case 8: //panic!
                     //player in 1 range gives up a card
@@ -423,17 +425,30 @@ public class GameState {
 
 
     //BANG card function:
-    public boolean playBANG(int attacker, int target)
+    public boolean playBANG(int attacker, int target)//automatically uses the attacked player's missed card if found for now
     {
         if(bangsPlayed > 1) return false; //checks that player has not previously played BANG card
         for(PlayableCard p: players[attacker].getCardsInHand())//iterates through entire hand of player
         {
             if(p.getCardNum()==0)//if particular card is the cardnumber for bang, use it
             {
-                players[target].setHealth(players[target].getHealth()-1); //decreases health of target player
-                bangsPlayed++; //increases the count of bangsPlayed by 1
-
-                return true; //returns true, showing that the move was successful
+                PlayableCard bangcard = p;
+                for(PlayableCard q: players[target].getCardsInHand())
+                {
+                    if(q.getCardNum()==MISSED)//if there exists a missed card in the attacked player's hand
+                    {
+                        PlayableCard missedcard = q;//refers to the missed card found
+                        players[target].getCardsInHand().remove(missedcard);//check if it works - removes missed card if one exists in the attacked player
+                        return true;
+                    }
+                    else//if no missed card found
+                    {
+                        players[target].setHealth(players[target].getHealth()-1); //decreases health of target player
+                        bangsPlayed++; //increases the count of bangsPlayed by 1
+                        players[attacker].getCardsInHand().remove(p);//removes bang card
+                        return true;
+                    }
+                }
             }
         }
         return false;//after searching through entire hand, if bang card not found, exits
@@ -455,7 +470,6 @@ public class GameState {
             }
         }
         return false;//else, returns false
-
     }
 
     //toString method:
