@@ -11,6 +11,12 @@ public class Card {
         description = null;
     }
 
+    //copy constructor for Card object:
+    public Card(Card c){
+        name = c.name;
+        description = c.description;
+    }
+
     //setter method for card name
     public void setName(String name)
     {

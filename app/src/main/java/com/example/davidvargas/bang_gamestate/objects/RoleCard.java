@@ -10,6 +10,9 @@ public class RoleCard extends Card {
         role = roleNum;
     }
 
+    //copy constructor for RoleCard object:
+    public RoleCard(RoleCard c){ role = c.role;}
+
     //setter method for role
     public void setRole(int roleNum)
     {

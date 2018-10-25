@@ -13,6 +13,11 @@ public class PlayableCard extends Card {
         cardNum = 0;
     }
 
+    //copy constructor for PlayableCard object
+    public PlayableCard(PlayableCard p){
+        isActive = p.isActive;
+        cardNum = p.cardNum;
+    }
     //constructor that passes in both parameters
     public PlayableCard(boolean isActive, int cardNum)
     {

@@ -13,6 +13,11 @@ public class CharacterCard extends Card {
         ability = -1;
     }
 
+    //copy constructor for CharacterCard
+    public CharacterCard(CharacterCard c){
+        baseHealth = c.baseHealth;
+        ability = c.ability;
+    }
     //constructor that passes in health
     public CharacterCard(int health)
     {
