@@ -142,10 +142,12 @@ public class GameState {
         {
             return false;
         }
-        Random rng = new Random();
-        players[player].setCardsInHand(new PlayableCard(false,rng.nextInt(1)));//random card; for now, either bang or beer
-        players[player].setCardsInHand(new PlayableCard(false,rng.nextInt(1)));//^
-        return true;
+        else
+        {
+            draw(player);
+            draw(player);
+            return true;
+        }
     }
 
     public boolean draw(int player)//for singledraw - added 10/21/18
@@ -156,7 +158,9 @@ public class GameState {
         }
         else
         {
-            players[player].setCardsInHand((PlayableCard)drawPile.get(0));
+            PlayableCard toDraw = drawPile.get(0);
+            players[player].setCardsInHand(toDraw);
+            drawPile.remove(toDraw);
             return true;
         }
     }
