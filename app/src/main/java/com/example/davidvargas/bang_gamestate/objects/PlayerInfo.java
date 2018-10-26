@@ -15,6 +15,7 @@ public class PlayerInfo {
     protected int name;
 
 
+    //constructor for the Player Info object
     public PlayerInfo()
     {
         health = 4;
@@ -26,6 +27,7 @@ public class PlayerInfo {
         cardsInHand = new ArrayList<PlayableCard>();
     }
 
+    //constructor for Player info object that passes in the name of the player: initializes it
     public PlayerInfo(int i)
     {
         health = 4;
@@ -38,6 +40,7 @@ public class PlayerInfo {
         name = i;
     }
 
+    //constructor for Player object that passes in the role and character, initializing them
     public PlayerInfo(RoleCard role, CharacterCard character)
     {
         health = character.baseHealth; //gets the player health from the character card
@@ -67,13 +70,13 @@ public class PlayerInfo {
     public int getName()
     {
         return name;
-    }
+    } //getter method for the player's name
 
     //sets the name/number
     public void setName(int i)
     {
         this.name = i;
-    }
+    } //setter method for the player's name
 
     public int getHealth()
     {
@@ -127,7 +130,7 @@ public class PlayerInfo {
     //toString method for Player's Information:
     public String toString()
     {
-        String s = "\t\tPlayer " + String.valueOf(name) + ":\n";
+        String s = "\t\tPlayer " + String.valueOf(name) + ":\n"; //concatenates the string of the name
         s+= "\t\t\tActive Cards:\n";
         for(PlayableCard p: activeCards) s+= "\t\t\t\t" + p.toString(); //concatenates strings of active cards
         s+= "\t\t\tCards in hand:\n";

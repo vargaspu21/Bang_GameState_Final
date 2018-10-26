@@ -122,6 +122,8 @@ public class GameState {
     //method to initialize deck: adds specific amount for each card through for loops, and it randomizes the deck
     private ArrayList<PlayableCard> initDeck(ArrayList<PlayableCard> deck)//adds all 80 cards of deck
     {
+        //adds cards based on the Constant amounts (for-loops);
+
         int i;
         for(i=0; i<NUMSCHOFIELD; i++) deck.add(new PlayableCard(true, SCHOFIELD));
         deck.add(new PlayableCard(true, REVCARBINE));
@@ -507,7 +509,7 @@ public class GameState {
         }
         else
         {
-            return false;
+            return false; //default: return true;
         }
     }
 
@@ -540,7 +542,7 @@ public class GameState {
     //BANG card function:
     public boolean playBANG(int attacker, int target)//automatically uses the attacked player's missed card if found for now
     {
-        if(bangsPlayed > 1)
+        if(bangsPlayed > 1) //if player has used a bang and player character is not Willy The Kid, return false
         {
             if(players[attacker].getCharacter().getCardNum()!=WILLYTHEKID)
             {
@@ -561,6 +563,7 @@ public class GameState {
                         players[target].getCardsInHand().remove(q);//check if it works - removes missed card if one exists in the attacked player
                         discardPile.add(q);
                         return true;
+                        //SLAB THE KILLER disabled for now due to complexity
                         //if(!(players[attacker].getCharacter().getCardNum()==SLABTHEKILLER))
                         //{
                           //  return true;
@@ -569,10 +572,13 @@ public class GameState {
                 }
                 //else, no missed cards are found
                 players[target].setHealth(players[target].getHealth()-1); //decreases health of target player
+
+                //if target's character is El Gringo, takes card from the attacker
                 if(players[target].getCharacter().getCardNum()==ELGRINGO)
                 {
                     drawFromPlayer(target,attacker);
                 }
+                //if target's character is Bart Cassidy, draws a card from deck
                 else if(players[target].getCharacter().getCardNum()==BARTCASSIDY)
                 {
                     draw(target);
