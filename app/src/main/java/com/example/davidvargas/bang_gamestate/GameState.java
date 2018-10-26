@@ -1,5 +1,7 @@
 package com.example.davidvargas.bang_gamestate;
 
+import android.graphics.Paint;
+
 import com.example.davidvargas.bang_gamestate.objects.Card;
 import com.example.davidvargas.bang_gamestate.objects.PlayableCard;
 import com.example.davidvargas.bang_gamestate.objects.PlayerInfo;
@@ -137,11 +139,42 @@ public class GameState {
         return deck;
     }
 
-    public boolean drawTwo(int player)//draws two cards; player number as identifier
+    public boolean drawTwo(int player)//draws two cards, used for starting-turn draw
     {
         if(playerTurn != player)//if not their turn, leave
         {
             return false;
+        }
+        else if(players[player].getCharacter().getCardNum()==JESSEJONES)
+        {
+            if(player==0)
+            {
+                int toDrawFrom = rand.nextInt(3)+1;
+                drawFromPlayer(player,toDrawFrom);
+            }
+            else if(player==1)
+            {
+                int[] drawArray = {0,2,3};
+                int toDrawFrom = rand.nextInt(3);
+                drawFromPlayer(player,drawArray[toDrawFrom]);
+            }
+            else if(player==2)
+            {
+                int[] drawArray = {0,1,3};
+                int toDrawFrom = rand.nextInt(3);
+                drawFromPlayer(player,drawArray[toDrawFrom]);
+            }
+            else if(player==3)
+            {
+                int toDrawFrom = rand.nextInt(3);
+                drawFromPlayer(player,toDrawFrom);
+            }
+            else
+            {
+                return false;
+            }
+            draw(player);
+            return true;
         }
         else
         {
@@ -167,6 +200,35 @@ public class GameState {
         }
     }
 
+    public boolean drawFromDiscard(int player)
+    {
+        if(playerTurn != player)
+        {
+            return false;
+        }
+        else
+        {
+            if(discardPile.isEmpty())
+            {
+                return false;
+            }
+            PlayableCard toDraw = discardPile.get(0);//gets topmost card
+            players[player].setCardsInHand(toDraw);//adds topmost card to player's hand
+            discardPile.remove(toDraw);//deletes the first instance of the card from drawpile
+            return true;
+        }
+    }
+
+    public boolean drawFromPlayer(int player, int target)
+    {
+        int handSize = players[target].getCardsInHand().size();//gets size of opponents hand
+        int indexToDraw = rand.nextInt(handSize);//randomly chooses card index to draw
+        PlayableCard toDraw = players[target].getCardsInHand().get(indexToDraw);//records what that card is
+        players[player].getCardsInHand().add(new PlayableCard(toDraw));//new instance of that card added to player, ASK TRIBELHORN ABOUT THIS??
+        players[target].getCardsInHand().remove(toDraw);//removes the one from target
+        return true;
+    }
+
     public boolean endTurn(int player)//ends the turn, determines next player
     {
         if(playerTurn != 4) playerTurn ++;
@@ -184,7 +246,7 @@ public class GameState {
         {
             switch(ability) {
                 case PAULREGRET: //paul regret - +1 distance seen
-                    players[player].setDistance(players[player].getDistance() + 1); 
+                    //DAVID DID THIS
                     return true;
 
                 case JOURDONNAIS: //jourdonnais - if draw heart when BANG'd, MISS'd
@@ -199,53 +261,32 @@ public class GameState {
                     draw(player); //draws additional card if if() triggers
 
                 case SLABTHEKILLER: //slab the killer - other player needs 2 misses to cancel bang from him
-                    //IMPLEMENT - will probably trigger this in the middle of battle
+                    //COMPLETED, happens during playBANG
 
                 case ELGRINGO: //el gringo - anytime hit, draws card from player
-                    //IMPLEMENT - will probably trigger right after taking damage
+                    //COMPLETED, happens during playBANG
 
                 case JESSEJONES: //jesse jones - draw first card from selected players hand
-                    //IMPLEMENT - will trigger in drawTwo
+                    //COMPLETED, happens during drawTwo
 
                 case SUZYLAFAYETTE: //suzy lafayette - soon as there are no cards in hand, draws new one
-                    if (players[player].getActiveCards().isEmpty()) {
+                    if (players[player].getActiveCards().isEmpty())
+                    {
                         draw(player);
                     }
                     return true;
 
                 case WILLYTHEKID: //willy the kid - can play any number of bangs
-                    //IMPLEMENT - will trigger in battle
+                    //COMPLETED, happens during playBANG
 
                 case ROSEDOOLAN: //rose doolan - sees all players distance -1, PROBLEM - this sets this application to everyone, maybe add a distance to playerinfo instead?
-                    if (player == 0) {
-                        players[1].setDistance(-1);
-                        players[2].setDistance(-1);
-                        players[3].setDistance(-1);
-                        return true;
-                    } else if (player == 1) {
-                        players[0].setDistance(-1);
-                        players[2].setDistance(-1);
-                        players[3].setDistance(-1);
-                        return true;
-                    } else if (player == 2) {
-                        players[0].setDistance(-1);
-                        players[1].setDistance(-1);
-                        players[3].setDistance(-1);
-                        return true;
-                    } else if (player == 3) {
-                        players[0].setDistance(-1);
-                        players[1].setDistance(-1);
-                        players[2].setDistance(-1);
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    //DAVID DID THIS
 
                 case BARTCASSIDY: //bart cassidy - each time hit, draws a card
-                    //IMPLEMENT - after damage taken in battle
+                    //COMPLETED, found alongside ELGRINGO in playBANG
 
                 case PEDRORAMIREZ: //pedro ramiree - draws first card from discard pile
-                    //IMPLEMENT - during drawing phase
+                    //JOHNNY CURRENTLY DOING
 
                 case SIDKETCHUM: //sid ketchum -  can discard 2 cards to regain one life
                     //IMPLEMENT - discard two cards
@@ -353,7 +394,7 @@ public class GameState {
         }
     }
 
-    private boolean playGatling(int player)
+    private boolean playGatling(int player)//needs some fixing
     {
         if (player == 0) {
             players[1].setHealth(players[1].getHealth()-1);
@@ -441,7 +482,17 @@ public class GameState {
     //BANG card function:
     public boolean playBANG(int attacker, int target)//automatically uses the attacked player's missed card if found for now
     {
-        if(bangsPlayed > 1) return false; //checks that player has not previously played BANG card
+        if(bangsPlayed > 1)
+        {
+            if(players[attacker].getCharacter().getCardNum()==WILLYTHEKID)
+            {
+
+            }
+            else
+            {
+                return false; //checks that player has not previously played BANG card
+            }
+        }
         for(PlayableCard p: players[attacker].getCardsInHand())//iterates through entire hand of player
         {
             if(p.getCardNum()==0)//if particular card is the cardnumber for bang, use it
@@ -456,19 +507,27 @@ public class GameState {
                     {
                         PlayableCard missedcard = q;//refers to the missed card found
                         players[target].getCardsInHand().remove(missedcard);//check if it works - removes missed card if one exists in the attacked player
-                        discardPile.add(q);
-                        return true;
+                        discardPile.add(q);//add missed to discard pile
+                        if(!(players[attacker].getCharacter().getCardNum()==SLABTHEKILLER))
+                        {
+                            return true;
+                        }
                     }
-
-            }
+                }
                     //else, no missed cards are found
                     players[target].setHealth(players[target].getHealth()-1); //decreases health of target player
+                    if(players[target].getCharacter().getCardNum()==ELGRINGO)
+                    {
+                        drawFromPlayer(target,attacker);
+                    }
+                    else if(players[target].getCharacter().getCardNum()==BARTCASSIDY)
+                    {
+                        draw(target);
+                    }
                     return true;
-
             }
         }
         return false;//after searching through entire hand, if bang card not found, exits
-
     }
 
     //Beer card function:

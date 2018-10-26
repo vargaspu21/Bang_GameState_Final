@@ -12,8 +12,6 @@ public class PlayerInfo {
     protected CharacterCard character;
     protected ArrayList<PlayableCard> activeCards;
     protected ArrayList<PlayableCard> cardsInHand;
-    protected int distance; //newly added 10/21/18
-
 
     public PlayerInfo()
     {
@@ -24,7 +22,6 @@ public class PlayerInfo {
         character = new CharacterCard(); //default character too?
         activeCards = new ArrayList<PlayableCard>(); //filler/default cards in hand?
         cardsInHand = new ArrayList<PlayableCard>();
-        distance = 0;
     }
 
     public PlayerInfo(RoleCard role, CharacterCard character)
@@ -35,7 +32,6 @@ public class PlayerInfo {
         maxHealth = health; //sets the max health to the starting health
         this.role = role; //declares the role of this player to that passed in
         this.character = character; //declares the character of this player to that passed in
-        distance = 0;
     }
 
     //copy constructor for Player Info:
@@ -51,7 +47,6 @@ public class PlayerInfo {
         for(PlayableCard c: pi.activeCards) this.activeCards.add(c);
         cardsInHand = new ArrayList<PlayableCard>();
         for(PlayableCard c: pi.cardsInHand) this.cardsInHand.add(c);
-        distance = 0;
     }
 
     public int getHealth()
@@ -70,8 +65,6 @@ public class PlayerInfo {
     {
         return role;
     } //getter method for the player's max health
-
-    public int getDistance() { return distance; }
 
     public CharacterCard getCharacter() { return character; } //getter method for the player's character
 
@@ -94,11 +87,6 @@ public class PlayerInfo {
     } //setter method for player's role'
 
     public void setCharacter(CharacterCard character) { this.character = character; } //setter method for player's character
-
-    public void setDistance(int distance)//newly added 10/21/18
-    {
-        this.distance = distance;
-    }
 
     public void setActiveCards(PlayableCard c)
     {
