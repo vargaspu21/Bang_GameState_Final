@@ -90,7 +90,7 @@ public class PlayerInfo {
     public RoleCard getRole()
     {
         return role;
-    } //getter method for the player's max health
+    } //getter method for the player's role
 
     public CharacterCard getCharacter() { return character; } //getter method for the player's character
 

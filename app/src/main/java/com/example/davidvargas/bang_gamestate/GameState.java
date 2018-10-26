@@ -73,6 +73,21 @@ public class GameState {
     public final int NUMBARREL = 2;
     public final int NUMMUSTANG = 2;
 
+    //CConstants for roles
+    public final int SHERIFF = 0;
+    public final int OUTLAW  = 1;
+    public final int RENEGADE = 2;
+
+    //Constants for Suits
+    /*
+    Suits are not fully implemented yet however are big part of the game
+    right now all cards will have a default suit of hearts, however in future this will
+    have to be changed to allow for use of the Draw! mechanic.
+     */
+    public final int HEARTS = 0;
+    public final int SPADES = 1;
+    public final int CLUBS = 2;
+    public final int DIAMONDS = 3;
     //initializes variables:
     protected ArrayList <PlayableCard> drawPile;
     protected ArrayList <PlayableCard> discardPile;
@@ -140,7 +155,7 @@ public class GameState {
         for(i=0; i<NUMINDIANS; i++) deck.add(new PlayableCard(false, INDIANS));
         for(i=0; i<NUMGENERALSTORE; i++) deck.add(new PlayableCard(false, GENERALSTORE));
         deck.add(new PlayableCard(false, SALOON));
-        for(i=0; i<NUMJAIL; i++) deck.add(new PlayableCard(true, JAIL));
+        for(i=0; i<NUMJAIL; i++) deck.add(new PlayableCard (true, JAIL));
         deck.add(new PlayableCard(true, DYNAMITE));
         for(i=0; i<NUMBARREL; i++) deck.add(new PlayableCard(true, BARREL));
         deck.add(new PlayableCard(true, SCOPE));
@@ -403,17 +418,21 @@ public class GameState {
                     return playSaloon(player);
 
                 case JAIL: //jail
-
+                    return playActiveCard(player, target, cardNum);
+                    //start of turn check for jail, if players has then skip turn
                 case DYNAMITE: //dynamite
-
+                    return playActiveCard(player, target, cardNum);
+                    //start of turn draw! mechanic to determine if damage is taken.
                 case BARREL: //barrel
-
+                    return playActiveCard(player, player, cardNum);
+                    //implemented in bang function,
                 case SCOPE: //scope, you see others -1 distance
                     players[player].setRange(players[player].getRange()-1);
-                    return true;
+                    return playActiveCard(player, player, cardNum);
 
                 case MUSTANG: //mustang, people see you +1 distance
-
+                    return playActiveCard(player, player, cardNum);
+                    //implemented in bang method
                 default:
                     return false;
 
@@ -514,24 +533,73 @@ public class GameState {
     //method to determine the distance between players:
     private int distanceBetween(int attacker, int target){
         //if first player, distance is 1 for players 2 and 4, and is 2 for player 3
+
         if(attacker == 0 ){
-            if(target == 1 || target == 3) return 1;
-            else if(target ==2) return 2;
+            if(target == 1 || target == 3) {
+                for (PlayableCard p : players[target].getActiveCards()) {
+                    if (p.getCardNum() == MUSTANG)
+                        return 2;
+                }
+                return 1;
+            }
+            else if(target ==2) {
+                for (PlayableCard p : players[target].getActiveCards()) {
+                    if (p.getCardNum() == MUSTANG)
+                        return 3;
+                }
+                return 2;
+            }
         }
         //if second player, distance is 1 for players 3 and 1, and is 2 for player 4
         else if(attacker == 1){
-            if(target == 2 || target == 0 ) return 1;
-            else if(target == 3) return 2;
+            if(target == 2 || target == 0 ) {
+                for (PlayableCard p : players[target].getActiveCards()) {
+                    if (p.getCardNum() == MUSTANG)
+                        return 2;
+                }
+                return 1;
+            }
+            else if(target == 3) {
+                for (PlayableCard p : players[target].getActiveCards()) {
+                    if (p.getCardNum() == MUSTANG)
+                        return 3;
+                }
+                return 2;
+            }
         }
         //if third player, distance is 1 for players 2 and 4, and is 2 for player 1
         else if(attacker == 2){
-            if(target == 3 || target == 1 ) return 1;
-            else if(target == 0) return 2;
+            if(target == 3 || target == 1 ) {
+                for (PlayableCard p : players[target].getActiveCards()) {
+                    if (p.getCardNum() == MUSTANG)
+                        return 2;
+                }
+                return 1;
+            }
+            else if(target == 0) {
+                for (PlayableCard p : players[target].getActiveCards()) {
+                    if (p.getCardNum() == MUSTANG)
+                        return 3;
+                }
+                return 2;
+            }
         }
         //if fourth player, distance is 1 for players 3 and 1, and is 2 for player 2
         else if (attacker == 3){
-            if(target == 0 || target == 2 ) return 1;
-            else if(target == 1) return 2;
+            if(target == 0 || target == 2 ) {
+                for (PlayableCard p : players[target].getActiveCards()) {
+                    if (p.getCardNum() == MUSTANG)
+                        return 2;
+                }
+                return 1;
+            }
+            else if(target == 1) {
+                for (PlayableCard p : players[target].getActiveCards()) {
+                    if (p.getCardNum() == MUSTANG)
+                        return 3;
+                }
+                return 2;
+            }
         }
         return 0; //default , return 0
     }
@@ -631,29 +699,46 @@ public class GameState {
     }
 
     //playing a card
-    public boolean playFromHandAction(int player, PlayableCard c)
-    {
-        //check if the player has a card
-        if(!(players[player].getCardsInHand().contains(c))) return false;
-        //if this is a blue card
-        if(c.getIsActive())
+    //for now this just removes the card from person playing its hand
+    //as well as add it to the targets active cards
+    public boolean playActiveCard(int player, int target, int card) {
+        boolean flag = false;
+        for(PlayableCard p : players[player].getCardsInHand()) { //checks to see if it is possible to play this card
+            if(p.getCardNum() == card) { //checks players hand
+                for(PlayableCard c : players[target].getActiveCards()) {
+                    if(c.getCardNum() == card) { //checks targets Active cards
+                        players[player].getCardsInHand().remove(p);
+                        flag = true;
+                    }
+                }
+            }
+        }
+        if(flag)
         {
-            //check if its a duplicate card
-            if(players[player].getActiveCards().contains(c)) return false;
-            else
-            {
-                players[player].setActiveCards(c); //add card to active cards
-                players[player].getCardsInHand().remove(c); //remove card from hand
-                endTurn(player); //end turn
+            if(card == JAIL) {
+                if(players[target].getRole().getRole() != SHERIFF) {
+                    players[target].setActiveCards(new PlayableCard(true, JAIL));
+                    return true;
+                }
+            }
+            else if(card == BARREL) {
+                players[target].setActiveCards(new PlayableCard(true,BARREL));
+                return true;
+            }
+            else if(card == SCOPE) {
+                players[target].setActiveCards(new PlayableCard(true, SCOPE));
+                return true;
+            }
+            else if(card == MUSTANG) {
+                players[target].setActiveCards(new PlayableCard(true, MUSTANG));
+                return true;
+            }
+            else if(card == DYNAMITE) {
+                players[target].setActiveCards(new PlayableCard(true, DYNAMITE));
                 return true;
             }
         }
-        else { //if it is not a blue card
-            this.playCard(player, player, c.getCardNum()); //play card using method from playable card class - FIX FOR FULL FUNCTIONALITY
-            players[player].getCardsInHand().remove(c); //remove the card from players hand
-            endTurn(player); //end turn
-            return true;
-        }
+        return false;
     }
 
 
@@ -820,5 +905,17 @@ public class GameState {
             if(booleanFlag == 1) players[2].setHealth(players[2].getHealth() - 1);
         }
         return false; //default: returns false;
+    }
+    /*
+    The following function uses the suits to make the draw mechanic work, right now
+    suits are not fully implemented.
+     */
+    private boolean drawExclamation(int suit)
+    {
+        if(drawPile.get(0).getSuit() == suit)
+        {
+            return true;
+        }
+        else return false;
     }
 }

@@ -143,6 +143,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     multiLine.append("Current game state: \n"+ fourthInstance.toString());
                     multiLine.append("\n******************************************\n");
 
+
+                    //player1's turn
+                    //player1 draws two cards
+                //add Jail and
+
                 break;
         }
     }
