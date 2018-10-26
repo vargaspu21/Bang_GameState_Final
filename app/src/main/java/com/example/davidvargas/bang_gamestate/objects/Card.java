@@ -2,6 +2,7 @@ package com.example.davidvargas.bang_gamestate.objects;
 
 public class Card {
     //initializes variables:
+    //constant for playablecards, will all be added for copy constructor soon
     public final int SCHOFIELD = 0;
     public final int REVCARBINE = 1;
     public final int WINCHESTER = 2;
@@ -39,6 +40,7 @@ public class Card {
         description = c.description;
     }
 
+    //received from playablecard constructor, will change name and description as suited
     public Card(int cardNum)
     {
         switch(cardNum)

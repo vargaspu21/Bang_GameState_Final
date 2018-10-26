@@ -73,39 +73,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     multiLine.append("Current game state: \n"+ firstInstance.toString());
                     multiLine.append("\n******************************************\n");
 
-                    //1)
-                    //add a bang card to player 1 hand
-                    //add a beer card to player 2 hand
-                    //add a bang card to player 3 hand
-                    //set player 4 health to 1
-                    /*
-                    multiLine.append("FIRST INSTANCE: \n");
-                    multiLine.append("Adding bang card to player 1 hand...\nAdding a beer card to player 2 hand...\n" +
-                            "Adding a bang card to player 3 hand...\n");
-                    PlayableCard bangCard = new PlayableCard(false, 0);
-                    PlayableCard beerCard = new PlayableCard(false, 1);
-                    firstInstance.players[0].setCardsInHand(bangCard);
-                    firstInstance.players[1].setCardsInHand(beerCard);
-                    firstInstance.players[2].setCardsInHand(bangCard);
-                    firstInstance.players[3].setHealth(1);
-                    multiLine.append("Current game state: \n"+ firstInstance.toString());
-                    multiLine.append("\n******************************************\n");
-                    */
-
-                    //2)
-                    //player 1 draws two cards
-                    //player 1 plays a bang card (assume player 2 is selected)
-                    //player 1 end turn
-                    /*
-                    multiLine.append("SECOND INSTANCE: \n");
-                    multiLine.append("Drawing 2 cards for player 1, then playing a bang on player 2...\n");
-                    multiLine.append("Ending turn...\n");
-                    secondInstance.drawTwo(0);
-                    secondInstance.playBANG(0,1);
-                    secondInstance.endTurn(0);
-                    multiLine.append("Current game state: \n"+ secondInstance.toString());
-                    multiLine.append("\n******************************************\n");
-                    */
 
                     //player2's turn
                     //player2 draws two cards
@@ -130,21 +97,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     multiLine.append("Current game state: \n"+ secondInstance.toString());
                     multiLine.append("\n******************************************\n");
 
-
-                //3)
-                    //player 2 draws
-                    //player 2 plays a beer
-                    //player 2 ends turn
-                    /*
-                    multiLine.append("THIRD INSTANCE: \n");
-                    multiLine.append("Drawing 2 cards for player 2, then playing beer card...\n");
-                    multiLine.append("Ending turn...\n");
-                    secondInstance.drawTwo(1);
-                    secondInstance.playBeer(1);
-                    secondInstance.endTurn(1);
-                    multiLine.append("Current game state: \n"+ secondInstance.toString());
-                    multiLine.append("\n******************************************\n");
-                    */
 
                     //player3's turn
                     //player3 draws two cards
@@ -190,50 +142,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     fourthInstance.endTurn(3);
                     multiLine.append("Current game state: \n"+ fourthInstance.toString());
                     multiLine.append("\n******************************************\n");
-
-
-
-                    
-
-                //4)
-                    //player 3 draws
-                    //player 3 plays a bang card (assume player 4 is selected)
-                    //(player 4 dies bc only had one health points)
-                    //player 3 ends turn
-                    /*
-                    multiLine.append("FOURTH INSTANCE: \n");
-                    multiLine.append("Drawing 2 cards for player 3, then playing a bang on player 4..\n");
-                    multiLine.append("Player 4 dies, no health points remaining\n");
-                    multiLine.append("Ending turn...\n");
-                    secondInstance.drawTwo(2);
-                    secondInstance.playBANG(2,3);
-                    secondInstance.endTurn(2);
-                    multiLine.append("Current game state: \n"+ secondInstance.toString());
-                    multiLine.append("\n******************************************\n");
-                    */
-
-                    //initialize new gamestate
-                    //give player 1 2 gatling cards
-                    //give player 2 a saloon card, should heal back to max, others dont
-                    //simulates phase rotations (draw two cards, play cards, end turn, next player... ->)
-                      /*
-                    thirdInstance = new GameState();
-                    thirdInstance.players[0].setCardsInHand(new PlayableCard(false, GATLING));
-                    thirdInstance.players[0].setCardsInHand(new PlayableCard(false, GATLING));
-                    thirdInstance.players[1].setCardsInHand(new PlayableCard(false, SALOON));
-                    thirdInstance.drawTwo(0);
-                    thirdInstance.playCard(0,0,GATLING);
-                    thirdInstance.playCard(0,0,GATLING);
-                    thirdInstance.endTurn(0);
-                    thirdInstance.drawTwo(1);
-                    thirdInstance.playCard(1,1,SALOON);
-                    thirdInstance.endTurn(1);
-                    multiLine.append("Current game state: \n"+ thirdInstance.toString());
-                    multiLine.append("\n******************************************\n");
-                    */
-
-
-
 
                 break;
         }

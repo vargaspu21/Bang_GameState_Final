@@ -156,7 +156,7 @@ public class GameState {
         {
             return false;
         }
-        if(players[player].getCharacter().getCardNum()==JESSEJONES) //if player has Jesse Jones character,
+        if(players[player].getCharacter().getCardNum()==JESSEJONES) //if player is Jesse Jones, first card drawn is from a random player
         {
             if(player==0)
             {
@@ -421,8 +421,11 @@ public class GameState {
         }
     }
 
-    private boolean playGatling(int player)//needs some fixing
+    //method to play gatling card; called from playCard method; deals damage to everyone except attacker
+    private boolean playGatling(int player)
     {
+        //checks for the user and deals damage accordingly
+
         if (player == 0) {
             players[1].setHealth(players[1].getHealth()-1);
             players[2].setHealth(players[2].getHealth()-1);
@@ -448,8 +451,11 @@ public class GameState {
         }
     }
 
+    //used when playing saloon card; called from playCard; heals everyone 1 health. heals the user an additional one health.
     private boolean playSaloon(int player)
     {
+        //checks player and increases health accordingly;
+
         if (player == 0) {
             players[0].setHealth(players[0].getHealth()+2);
             players[1].setHealth(players[1].getHealth()+1);

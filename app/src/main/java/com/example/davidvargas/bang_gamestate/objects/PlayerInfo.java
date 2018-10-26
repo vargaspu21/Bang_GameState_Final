@@ -63,11 +63,13 @@ public class PlayerInfo {
         for(PlayableCard c: pi.cardsInHand) this.cardsInHand.add(c);
     }
 
+    //gives the name, which is a number
     public int getName()
     {
         return name;
     }
 
+    //sets the name/number
     public void setName(int i)
     {
         this.name = i;
