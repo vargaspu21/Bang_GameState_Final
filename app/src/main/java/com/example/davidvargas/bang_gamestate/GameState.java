@@ -184,7 +184,7 @@ public class GameState {
         {
             switch(ability) {
                 case PAULREGRET: //paul regret - +1 distance seen
-                    players[player].setDistance(players[player].getDistance() + 1);
+                    players[player].setDistance(players[player].getDistance() + 1); 
                     return true;
 
                 case JOURDONNAIS: //jourdonnais - if draw heart when BANG'd, MISS'd
