@@ -2,7 +2,7 @@ package com.example.davidvargas.bang_gamestate.objects;
 
 public class RoleCard extends Card {
 
-    int role; //0: Sheriff, 1: Outlaw, 2: Renegade
+    private int role; //0: Sheriff, 1: Outlaw, 2: Renegade
 
     //constructor:
     public RoleCard(int roleNum)
