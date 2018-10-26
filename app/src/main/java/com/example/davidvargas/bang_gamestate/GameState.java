@@ -97,10 +97,10 @@ public class GameState {
     {
         //creates a deep copy of each card in the array list:
         drawPile = new ArrayList<PlayableCard>();
-        for(PlayableCard c: gs.drawPile) this.drawPile.add(c);
+        for(PlayableCard c: gs.drawPile) this.drawPile.add(new PlayableCard(c));
         //creates a deep copy of each card in the array list:
         discardPile = new ArrayList<PlayableCard>();
-        for(PlayableCard c: gs.discardPile) this.discardPile.add(c);
+        for(PlayableCard c: gs.discardPile) this.discardPile.add(new PlayableCard(c));
         ////creates a deep copy of each card in the array:
         players = new PlayerInfo[4];
         for(int i = 0; i< players.length; i++) this.players[i] = gs.players[i];
@@ -237,8 +237,7 @@ public class GameState {
                         players[1].setDistance(-1);
                         players[2].setDistance(-1);
                         return true;
-                    } else
-                        {
+                    } else {
                         return false;
                     }
 
@@ -283,18 +282,22 @@ public class GameState {
             {
                 case SCHOFIELD: //schofield, +2 range
                     //we can either do weapons like rose doolan character, or add a new int called range to playerinfo
+                    players[player].setRange( (players[player].getRange()) + 2);
+                    return true;
 
                 case REVCARBINE: //rev carabine, +4 range
-
+                    players[player].setRange( (players[player].getRange()) + 4);
+                    return true;
                 case WINCHESTER: //winchester, +5 range
-
+                    players[player].setRange( (players[player].getRange()) + 5);
                 case VOLCANIC: //volcanic, +1 range, play any number of bangs
                     //second effect apply during battle phase
+                    players[player].setRange( (players[player].getRange()) + 1);
 
                 case REMINGTON: //remington, +3 range
 
                 case BANG: //bang
-                    return playBANG(player,target);
+                    playBANG(player,target);
 
                 case MISSED: //missed!, never used independently
                     //cannot be used without replying to a bang

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class PlayerInfo {
 
-    public int health;
+    public int health, range;
     protected int maxHealth;
     protected RoleCard role;
     protected CharacterCard character;
@@ -18,6 +18,7 @@ public class PlayerInfo {
     public PlayerInfo()
     {
         health = 4;
+        range= 1;
         maxHealth = 4;
         role = new RoleCard(0); //maybe find a default role to change into?
         character = new CharacterCard(); //default character too?
@@ -29,6 +30,7 @@ public class PlayerInfo {
     public PlayerInfo(RoleCard role, CharacterCard character)
     {
         health = character.baseHealth; //gets the player health from the character card
+        range = 1;
         if(role.getRole()==0) health++; //if the role is sheriff, add one more life point
         maxHealth = health; //sets the max health to the starting health
         this.role = role; //declares the role of this player to that passed in
@@ -40,6 +42,7 @@ public class PlayerInfo {
     public PlayerInfo(PlayerInfo pi)
     {
         this.health = pi.health;
+        this.range = pi.range;
         this.maxHealth = pi.maxHealth;
         this.role = pi.role;
         this.character = pi.character;
@@ -61,6 +64,8 @@ public class PlayerInfo {
         return maxHealth;
     } //getter method for the player's max health
 
+    public int getRange(){ return range;} //getter method for player's range
+
     public RoleCard getRole()
     {
         return role;
@@ -78,6 +83,8 @@ public class PlayerInfo {
     {
         this.health = health;
     } //setter method for player's health'
+
+    public void setRange(int range){ this.range = range; } //setter method for player's range
 
     public void setMaxHealth(int maxHealth) { this.maxHealth = maxHealth; } //setter method for player's max health'
 
