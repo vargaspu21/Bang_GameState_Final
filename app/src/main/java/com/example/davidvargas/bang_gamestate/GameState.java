@@ -10,6 +10,8 @@ import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Random;
 
 public class GameState {
@@ -246,7 +248,7 @@ public class GameState {
         {
             switch(ability) {
                 case PAULREGRET: //paul regret - +1 distance seen
-                    //DAVID DID THIS
+                    //NEED TO DO
                     return true;
 
                 case JOURDONNAIS: //jourdonnais - if draw heart when BANG'd, MISS'd
@@ -280,7 +282,8 @@ public class GameState {
                     //COMPLETED, happens during playBANG
 
                 case ROSEDOOLAN: //rose doolan - sees all players distance -1, PROBLEM - this sets this application to everyone, maybe add a distance to playerinfo instead?
-                    //DAVID DID THIS
+                   players[player].setRange(players[player].getRange() + 1);
+                   return true;
 
                 case BARTCASSIDY: //bart cassidy - each time hit, draws a card
                     //COMPLETED, found alongside ELGRINGO in playBANG
@@ -322,7 +325,6 @@ public class GameState {
             switch(cardNum)
             {
                 case SCHOFIELD: //schofield, +2 range
-                    //we can either do weapons like rose doolan character, or add a new int called range to playerinfo
                     players[player].setRange( (players[player].getRange()) + 2);
                     return true;
 
@@ -334,11 +336,14 @@ public class GameState {
                 case VOLCANIC: //volcanic, +1 range, play any number of bangs
                     //second effect apply during battle phase
                     players[player].setRange( (players[player].getRange()) + 1);
+                    return true;
 
                 case REMINGTON: //remington, +3 range
-
+                    players[player].setRange( (players[player].getRange()) + 3);
+                    return true;
                 case BANG: //bang
-                    playBANG(player,target);
+                    playBANG(player, target);
+                    return true;
 
                 case MISSED: //missed!, never used independently
                     //cannot be used without replying to a bang
@@ -356,9 +361,13 @@ public class GameState {
 
                 case STAGECOACH: //stagecoach
                     //draw two cards
+                    drawTwo(player);
 
                 case WELLSFARGO: //wells fargo
                     //draw three cards
+                    drawTwo(player);
+                    draw(player);
+                    return true;
 
                 case GATLING: //gatling
                     //all other players lose one health
@@ -367,10 +376,15 @@ public class GameState {
 
                 case DUEL: //duel
                     //back-and-forth with selected player
+                    playDuel(player, target);
+                    return true;
 
                 case INDIANS: //indians, all players discard bang or lose a life
                     //automatic for now
                     //check players entire hands for a bang. discard if found. dont lose a life.
+                    playIndians(player);
+                    return true;
+
 
                 case GENERALSTORE: //general store, reveal number of cards as players from deck, each choose one
 
@@ -384,6 +398,8 @@ public class GameState {
                 case BARREL: //barrel
 
                 case SCOPE: //scope, you see others -1 distance
+                    players[player].setRange(players[player].getRange()-1);
+                    return true;
 
                 case MUSTANG: //mustang, people see you +1 distance
 
@@ -478,6 +494,26 @@ public class GameState {
     }
 
 
+    private int distanceBetween(int attacker, int target){
+        if(attacker == 0 ){
+            if(target == 1 || target == 3) return 1;
+            else if(target ==2) return 2;
+        }
+        else if(attacker == 1){
+            if(target == 2 || target == 0 ) return 1;
+            else if(target == 3) return 2;
+        }
+        else if(attacker == 2){
+            if(target == 3 || target == 1 ) return 1;
+            else if(target == 0) return 2;
+        }
+        else if (attacker == 3){
+            if(target == 0 || target == 2 ) return 1;
+            else if(target == 1) return 2;
+        }
+        return 0;
+    }
+
 
     //BANG card function:
     public boolean playBANG(int attacker, int target)//automatically uses the attacked player's missed card if found for now
@@ -493,27 +529,26 @@ public class GameState {
                 return false; //checks that player has not previously played BANG card
             }
         }
+        if (players[attacker].getRange() < distanceBetween(attacker, target)) return false;
         for(PlayableCard p: players[attacker].getCardsInHand())//iterates through entire hand of player
         {
             if(p.getCardNum()==0)//if particular card is the cardnumber for bang, use it
             {
-                PlayableCard bangcard = p;
                 bangsPlayed++; //increases the count of bangsPlayed by 1
                 players[attacker].getCardsInHand().remove(p);//removes bang card
                 discardPile.add(p);
                 for(PlayableCard q: players[target].getCardsInHand())
                 {
-                    if(q.getCardNum()==MISSED)//if there exists a missed card in the attacked player's hand
-                    {
-                        PlayableCard missedcard = q;//refers to the missed card found
-                        players[target].getCardsInHand().remove(missedcard);//check if it works - removes missed card if one exists in the attacked player
-                        discardPile.add(q);//add missed to discard pile
+                    if(q.getCardNum()==MISSED) {//if there exists a missed card in the attacked player's hand
+                        players[target].getCardsInHand().remove(q);//check if it works - removes missed card if one exists in the attacked player
+                        discardPile.add(q);
                         if(!(players[attacker].getCharacter().getCardNum()==SLABTHEKILLER))
                         {
                             return true;
                         }
                     }
                 }
+
                     //else, no missed cards are found
                     players[target].setHealth(players[target].getHealth()-1); //decreases health of target player
                     if(players[target].getCharacter().getCardNum()==ELGRINGO)
@@ -563,7 +598,7 @@ public class GameState {
     }
 
     //shuffle method for the drawPile
-    public void shuffle()
+    private void shuffle()
     {
         Collections.shuffle(drawPile, rand);//makes use of collections object to shuffle arraylist
     }
@@ -595,8 +630,9 @@ public class GameState {
     }
 
 
-    public boolean discardIntoDraw(ArrayList<PlayableCard> discardPile){
-        if(this.drawPile.isEmpty()){
+    //method to make new draw pile from discard pile:
+    private boolean discardIntoDraw(ArrayList<PlayableCard> discardPile){
+        if(this.drawPile.isEmpty()){ //if draw pile is empty, move discard pile cards to it
             for(PlayableCard c: discardPile){
                 drawPile.add(c);
             }
@@ -605,4 +641,108 @@ public class GameState {
         return false;
     }
 
+    //method to play the Duel card:
+    private boolean playDuel(int player, int target) {
+        //initializes counts of bang cards in attacker's and target's hands to 0
+        int targetCount = 0;
+        int attackerCount = 0;
+
+        //counts how many bangs are in attacker's and target's hands
+        for (PlayableCard p : players[player].getCardsInHand()){
+            if (p.getCardNum() == BANG) attackerCount++;
+        }
+        for (PlayableCard p : players[target].getCardsInHand()){
+            if (p.getCardNum() == BANG) targetCount++;
+        }
+
+        if (attackerCount <= targetCount) //if attacker has less than or same amount BANGs as target, attacker loses
+            players[player].setHealth(players[player].getHealth() - 1); //lose one health
+        else players[target].setHealth(players[target].getHealth() - 1); //else if attacker has more BANGs than target, target loses one health
+
+        return true;
+    }
+    private boolean playIndians(int player){
+
+            if(player == 0){
+                for(PlayableCard p: players[1].getCardsInHand()){
+                    if(p.getCardNum() == BANG){
+                        players[1].getCardsInHand().remove(p);
+                        return true;
+                    }
+                }
+                for(PlayableCard p: players[2].getCardsInHand()){
+                    if(p.getCardNum() == BANG){
+                        players[2].getCardsInHand().remove(p);
+                        return true;
+                    }
+                }
+                for(PlayableCard p: players[3].getCardsInHand()){
+                    if(p.getCardNum() == BANG){
+                        players[3].getCardsInHand().remove(p);
+                        return true;
+                    }
+                }
+            }
+            else if(player == 1){
+                for(PlayableCard p: players[2].getCardsInHand()){
+                    if(p.getCardNum() == BANG){
+                        players[2].getCardsInHand().remove(p);
+                        return true;
+                    }
+                }
+                for(PlayableCard p: players[3].getCardsInHand()){
+                    if(p.getCardNum() == BANG){
+                        players[3].getCardsInHand().remove(p);
+                        return true;
+                    }
+                }
+                for(PlayableCard p: players[0].getCardsInHand()){
+                    if(p.getCardNum() == BANG){
+                        players[0].getCardsInHand().remove(p);
+                        return true;
+                    }
+                }
+            }
+            else if(player == 2){
+                for(PlayableCard p: players[3].getCardsInHand()){
+                    if(p.getCardNum() == BANG){
+                        players[3].getCardsInHand().remove(p);
+                        return true;
+                    }
+                }
+                for(PlayableCard p: players[0].getCardsInHand()){
+                    if(p.getCardNum() == BANG){
+                        players[0].getCardsInHand().remove(p);
+                        return true;
+                    }
+                }
+                for(PlayableCard p: players[1].getCardsInHand()){
+                    if(p.getCardNum() == BANG){
+                        players[1].getCardsInHand().remove(p);
+                        return true;
+                    }
+                }
+            }
+            else if(player == 3){
+                for(PlayableCard p: players[0].getCardsInHand()){
+                    if(p.getCardNum() == BANG){
+                        players[0].getCardsInHand().remove(p);
+                        return true;
+                    }
+                }
+                for(PlayableCard p: players[1].getCardsInHand()){
+                    if(p.getCardNum() == BANG){
+                        players[1].getCardsInHand().remove(p);
+                        return true;
+                    }
+                }
+                for(PlayableCard p: players[2].getCardsInHand()){
+                    if(p.getCardNum() == BANG){
+                        players[2].getCardsInHand().remove(p);
+                        return true;
+                    }
+                }
+            }
+            return false;
+    }
 }
