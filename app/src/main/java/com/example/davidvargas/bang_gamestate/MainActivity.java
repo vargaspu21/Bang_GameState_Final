@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     thirdInstance.endTurn(1);
                     multiLine.append("Current game state: \n"+ thirdInstance.toString());
                     multiLine.append("\n******************************************\n");
+                    
 
 
 
