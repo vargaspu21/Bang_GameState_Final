@@ -250,6 +250,25 @@ public class GameState {
             draw(player);
             return true;
         }
+        else if(players[player].getCharacter().getCardNum() == BLACKJACK) //if character is blackjack try to use their ability
+        {
+            /*
+            Draws the first card then does a suit check for hearts or diamonds on second draw
+            if it succeeds then draw a third card, else only two
+            SUPPOSED TO REVEAL THE SECOND CARD THAT HE DRAWS BUT IDK HOW YET
+             */
+            draw(player);
+            if(drawExclamation(player, HEARTS) || drawExclamation(player, DIAMONDS)){
+                draw(player);
+                draw(player);
+                return true;
+            }
+            else {
+                draw(player);
+                return true;
+            }
+
+        }
         else
         {
             draw(player);//calls draw twice
@@ -321,9 +340,9 @@ public class GameState {
         {
             switch(ability) {
                 case PAULREGRET: //paul regret - +1 distance seen
-                    //NEED TO DO
                     /*
                     Implemented within the find distance method
+                    COMPLETED
                      */
                     return true;
 
@@ -336,10 +355,7 @@ public class GameState {
                      */
 
                 case BLACKJACK: //black jack - shows second card drawn, if heart or diamond, draws another card
-                    drawTwo(player);
-                    //IMPLEMENT - check second card drawn
-                    //CHARACTER ABILITY SKIPPED DUE TO SUIT/NUMBER COMPLEXITY
-                    draw(player); //draws additional card if if() triggers
+                    //Implement within the draw two function, no functionality for showing card yet
 
                 case SLABTHEKILLER: //slab the killer - other player needs 2 misses to cancel bang from him
                     //COMPLETED, happens during playBANG
