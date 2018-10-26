@@ -322,12 +322,18 @@ public class GameState {
             switch(ability) {
                 case PAULREGRET: //paul regret - +1 distance seen
                     //NEED TO DO
+                    /*
+                    Implemented within the find distance method
+                     */
                     return true;
 
                 case JOURDONNAIS: //jourdonnais - if draw heart when BANG'd, MISS'd
-                    draw(player);
+                    //Implement within the bang method
                     //IMPLEMENT - check last card they drew
-                    //CHARACTER ABILITY SKIPPED DUE TO SUIT/NUMBER COMPLEXITY
+                    //CHARACTER ABILITY SKIPPED DUE TO SUIT/NUMBER COMPLEXITY -
+                    /*
+                    Implemented within the bang method
+                     */
 
                 case BLACKJACK: //black jack - shows second card drawn, if heart or diamond, draws another card
                     drawTwo(player);
@@ -661,10 +667,17 @@ public class GameState {
                     discardPile.add(p);
                     for (PlayableCard r : players[target].getActiveCards()) //searches through targets blue cards for barrel
                     {
-                        if (r.getCardNum() == BARREL) { //if
-                            if (drawExclamation(target, SPADES)) //this should actually check for hearts but the default suit is hearts so i made it spades
+                        if (r.getCardNum() == BARREL) { //if they have a barrel try for miss
+                            if (drawExclamation(target, SPADES)) //CHANGE TO HEARTS WHEN SUIT IS FULLY IMLPEMENTED
                             {
                                 return true; //if the draw! is successful then it exits without the target taking damage
+                            }
+                        }
+                        if(players[target].getCharacter().getCardNum() == JOURDONNAIS)
+                        {
+                            if(drawExclamation(target, SPADES)) //CHANGE TO HEARTS WHEN SUIT IS FULLY IMPLEMENTED
+                            {
+                                return true;
                             }
                         }
                     }
@@ -693,6 +706,13 @@ public class GameState {
                         if(drawExclamation(target, SPADES)) //this should actually check for hearts but the default suit is hearts so i made it spades
                         {
                             return true; //if the draw! is successful then it exits without the target taking damage
+                        }
+                    }
+                    if(players[target].getCharacter().getCardNum() == JOURDONNAIS)
+                    {
+                        if(drawExclamation(target, SPADES)) //CHANGE TO HEARTS WHEN SUIT IS FULLY IMPLEMENTED
+                        {
+                            return true;
                         }
                     }
                 }
