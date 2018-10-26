@@ -462,10 +462,10 @@ public class GameState {
                     return true;
                 case PANIC: //panic!
                     //player in 1 range gives up a card
-
+                    return playPanic(player, target);
                 case CATBALOU: //cat balou
                     //one player discards a card
-
+                    return playCatBalou(target);
                 case STAGECOACH: //stagecoach
                     //draw two cards
                     draw(player);
@@ -1044,5 +1044,23 @@ public class GameState {
             return true;
         }
         else return false;
+    }
+    private boolean playPanic(int player, int target)
+    {
+        if(distanceBetween(player, target) == 1)
+        {
+            drawFromPlayer(player, target);
+            return true;
+        }
+        else return false;
+    }
+    /*target player discards a card,
+    however currently the card is prechosen, this could be changed lated to allow for target to choose, or attacker to choose.
+     */
+    private boolean playCatBalou(int target)
+    {
+
+        players[target].getCardsInHand().remove(0); //removes the left most card in targets hand
+        return true;
     }
 }
