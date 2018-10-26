@@ -237,7 +237,8 @@ public class GameState {
                         players[1].setDistance(-1);
                         players[2].setDistance(-1);
                         return true;
-                    } else {
+                    } else
+                        {
                         return false;
                     }
 
@@ -280,120 +281,130 @@ public class GameState {
         {
             switch(cardNum)
             {
-                case 0: //schofield, +2 range
+                case SCHOFIELD: //schofield, +2 range
                     //we can either do weapons like rose doolan character, or add a new int called range to playerinfo
 
-                case 1: //rev carabine, +4 range
+                case REVCARBINE: //rev carabine, +4 range
 
-                case 2: //winchester, +5 range
+                case WINCHESTER: //winchester, +5 range
 
-                case 3: //volcanic, +1 range, play any number of bangs
+                case VOLCANIC: //volcanic, +1 range, play any number of bangs
                     //second effect apply during battle phase
 
-                case 4: //remington, +3 range
+                case REMINGTON: //remington, +3 range
 
-                case 5: //bang
-                    playBANG(player,target);
+                case BANG: //bang
+                    return playBANG(player,target);
 
-                case 6: //missed!
+                case MISSED: //missed!, never used independently
                     //cannot be used without replying to a bang
                     //can be implemented multiple ways, can have a separate fn
                     return false; //false for now?
 
-                case 7: //beer, heals a health
-                    playBeer(player);
+                case BEER: //beer, heals a health
+                    return playBeer(player);
 
-                case 8: //panic!
+                case PANIC: //panic!
                     //player in 1 range gives up a card
 
-                case 9: //cat balou
+                case CATBALOU: //cat balou
                     //one player discards a card
 
-                case 10: //stagecoach
+                case STAGECOACH: //stagecoach
                     //draw two cards
 
-                case 11: //wells fargo
+                case WELLSFARGO: //wells fargo
                     //draw three cards
 
-                case 12: //gatling
+                case GATLING: //gatling
                     //all other players lose one health
                     //copy rose doolans effect
-                    if (player == 0) {
-                        players[1].setHealth(players[1].getHealth()-1);
-                        players[2].setHealth(players[2].getHealth()-1);
-                        players[3].setHealth(players[3].getHealth()-1);
-                        return true;
-                    } else if (player == 1) {
-                        players[0].setHealth(players[0].getHealth()-1);
-                        players[2].setHealth(players[2].getHealth()-1);
-                        players[3].setHealth(players[3].getHealth()-1);
-                        return true;
-                    } else if (player == 2) {
-                        players[0].setHealth(players[0].getHealth()-1);
-                        players[1].setHealth(players[1].getHealth()-1);
-                        players[3].setHealth(players[3].getHealth()-1);
-                        return true;
-                    } else if (player == 3) {
-                        players[0].setHealth(players[0].getHealth()-1);
-                        players[1].setHealth(players[1].getHealth()-1);
-                        players[2].setHealth(players[2].getHealth()-1);
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return playGatling(player);
 
-                case 13: //duel
+                case DUEL: //duel
                     //back-and-forth with selected player
 
-                case 14: //indians, all players discard bang or lose a life
+                case INDIANS: //indians, all players discard bang or lose a life
                     //automatic for now
                     //check players entire hands for a bang. discard if found. dont lose a life.
 
-                case 15: //general store, reveal number of cards as players from deck, each choose one
+                case GENERALSTORE: //general store, reveal number of cards as players from deck, each choose one
 
-                case 16: //saloon, player +2 health, others +1 health
-                    if (player == 0) {
-                        players[0].setHealth(players[0].getHealth()+2);
-                        players[1].setHealth(players[1].getHealth()+1);
-                        players[2].setHealth(players[2].getHealth()+1);
-                        players[3].setHealth(players[3].getHealth()+1);
-                        return true;
-                    } else if (player == 1) {
-                        players[0].setHealth(players[0].getHealth()+1);
-                        players[1].setHealth(players[1].getHealth()+2);
-                        players[2].setHealth(players[2].getHealth()+1);
-                        players[3].setHealth(players[3].getHealth()+1);
-                        return true;
-                    } else if (player == 2) {
-                        players[0].setHealth(players[0].getHealth()+1);
-                        players[1].setHealth(players[1].getHealth()+1);
-                        players[2].setHealth(players[2].getHealth()+2);
-                        players[3].setHealth(players[3].getHealth()+1);
-                        return true;
-                    } else if (player == 3) {
-                        players[0].setHealth(players[0].getHealth()+1);
-                        players[1].setHealth(players[1].getHealth()+1);
-                        players[2].setHealth(players[2].getHealth()+1);
-                        players[3].setHealth(players[3].getHealth()+2);
-                        return true;
-                    } else {
-                        return false;
-                    }
+                case SALOON: //saloon, player +2 health, others +1 health
+                    return playSaloon(player);
 
-                case 17: //jail
+                case JAIL: //jail
 
-                case 18: //dynamite
+                case DYNAMITE: //dynamite
 
-                case 19: //barrel
+                case BARREL: //barrel
 
-                case 20: //scope, you see others -1 distance
+                case SCOPE: //scope, you see others -1 distance
 
-                case 21: //mustang, people see you +1 distance
+                case MUSTANG: //mustang, people see you +1 distance
 
                 default:
                     return false;
 
             }
+        }
+    }
+
+    private boolean playGatling(int player)
+    {
+        if (player == 0) {
+            players[1].setHealth(players[1].getHealth()-1);
+            players[2].setHealth(players[2].getHealth()-1);
+            players[3].setHealth(players[3].getHealth()-1);
+            return true;
+        } else if (player == 1) {
+            players[0].setHealth(players[0].getHealth()-1);
+            players[2].setHealth(players[2].getHealth()-1);
+            players[3].setHealth(players[3].getHealth()-1);
+            return true;
+        } else if (player == 2) {
+            players[0].setHealth(players[0].getHealth()-1);
+            players[1].setHealth(players[1].getHealth()-1);
+            players[3].setHealth(players[3].getHealth()-1);
+            return true;
+        } else if (player == 3) {
+            players[0].setHealth(players[0].getHealth()-1);
+            players[1].setHealth(players[1].getHealth()-1);
+            players[2].setHealth(players[2].getHealth()-1);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean playSaloon(int player)
+    {
+        if (player == 0) {
+            players[0].setHealth(players[0].getHealth()+2);
+            players[1].setHealth(players[1].getHealth()+1);
+            players[2].setHealth(players[2].getHealth()+1);
+            players[3].setHealth(players[3].getHealth()+1);
+            return true;
+        } else if (player == 1) {
+            players[0].setHealth(players[0].getHealth()+1);
+            players[1].setHealth(players[1].getHealth()+2);
+            players[2].setHealth(players[2].getHealth()+1);
+            players[3].setHealth(players[3].getHealth()+1);
+            return true;
+        } else if (player == 2) {
+            players[0].setHealth(players[0].getHealth()+1);
+            players[1].setHealth(players[1].getHealth()+1);
+            players[2].setHealth(players[2].getHealth()+2);
+            players[3].setHealth(players[3].getHealth()+1);
+            return true;
+        } else if (player == 3) {
+            players[0].setHealth(players[0].getHealth()+1);
+            players[1].setHealth(players[1].getHealth()+1);
+            players[2].setHealth(players[2].getHealth()+1);
+            players[3].setHealth(players[3].getHealth()+2);
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -433,22 +444,24 @@ public class GameState {
             if(p.getCardNum()==0)//if particular card is the cardnumber for bang, use it
             {
                 PlayableCard bangcard = p;
+                bangsPlayed++; //increases the count of bangsPlayed by 1
+                players[attacker].getCardsInHand().remove(p);//removes bang card
+                discardPile.add(p);
                 for(PlayableCard q: players[target].getCardsInHand())
                 {
                     if(q.getCardNum()==MISSED)//if there exists a missed card in the attacked player's hand
                     {
                         PlayableCard missedcard = q;//refers to the missed card found
                         players[target].getCardsInHand().remove(missedcard);//check if it works - removes missed card if one exists in the attacked player
+                        discardPile.add(q);
                         return true;
                     }
-                    else//if no missed card found
-                    {
-                        players[target].setHealth(players[target].getHealth()-1); //decreases health of target player
-                        bangsPlayed++; //increases the count of bangsPlayed by 1
-                        players[attacker].getCardsInHand().remove(p);//removes bang card
-                        return true;
-                    }
-                }
+
+            }
+                    //else, no missed cards are found
+                    players[target].setHealth(players[target].getHealth()-1); //decreases health of target player
+                    return true;
+
             }
         }
         return false;//after searching through entire hand, if bang card not found, exits
