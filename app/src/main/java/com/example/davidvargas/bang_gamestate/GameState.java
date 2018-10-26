@@ -93,6 +93,13 @@ public class GameState {
         players[3] = new PlayerInfo();
         playerTurn = 0;//current players turn
         bangsPlayed = 0;//prevents more than one bang card to be played per turn
+        /*
+         External Citation
+         Date: 10 October 2018
+         Problem: Did not know how to set seed of Random using the current time.
+         Resource: Tribelhorn
+         Solution: Assisted with writing this line of code.
+         */
         rand.setSeed(System.currentTimeMillis());
     }
 
@@ -112,7 +119,8 @@ public class GameState {
         this.bangsPlayed = gs.bangsPlayed;
     }
 
-    public ArrayList<PlayableCard> initDeck(ArrayList<PlayableCard> deck)//adds all 80 cards of deck
+    //method to initialize deck: adds specific amount for each card through for loops, and it randomizes the deck
+    private ArrayList<PlayableCard> initDeck(ArrayList<PlayableCard> deck)//adds all 80 cards of deck
     {
         int i;
         for(i=0; i<NUMSCHOFIELD; i++) deck.add(new PlayableCard(true, SCHOFIELD));
@@ -141,18 +149,19 @@ public class GameState {
         return deck;
     }
 
-    public boolean drawTwo(int player)//draws two cards, used for starting-turn draw
+    //draws two cards, used for starting-turn draw
+    public boolean drawTwo(int player)
     {
-        if(playerTurn != player)//if not their turn, leave
+        if(playerTurn != player)//if not their turn, return
         {
             return false;
         }
-        else if(players[player].getCharacter().getCardNum()==JESSEJONES)
+        if(players[player].getCharacter().getCardNum()==JESSEJONES) //if player has Jesse Jones character,
         {
             if(player==0)
             {
                 int toDrawFrom = rand.nextInt(3)+1;
-                drawFromPlayer(player,toDrawFrom);
+                drawFromPlayer(player, toDrawFrom);
             }
             else if(player==1)
             {
@@ -186,7 +195,7 @@ public class GameState {
         }
     }
 
-    public boolean draw(int player)//for singledraw - added 10/21/18
+    private boolean draw(int player)//for singledraw - added 10/21/18
     {
         if(playerTurn != player)
         {
@@ -221,7 +230,7 @@ public class GameState {
         }
     }
 
-    public boolean drawFromPlayer(int player, int target)
+    private boolean drawFromPlayer(int player, int target)
     {
         int handSize = players[target].getCardsInHand().size();//gets size of opponents hand
         int indexToDraw = rand.nextInt(handSize);//randomly chooses card index to draw
@@ -351,8 +360,8 @@ public class GameState {
                     return false; //false for now?
 
                 case BEER: //beer, heals a health
-                    return playBeer(player);
-
+                    playBeer(player);
+                    return true;
                 case PANIC: //panic!
                     //player in 1 range gives up a card
 
@@ -372,7 +381,8 @@ public class GameState {
                 case GATLING: //gatling
                     //all other players lose one health
                     //copy rose doolans effect
-                    return playGatling(player);
+                    playGatling(player);
+                    return true;
 
                 case DUEL: //duel
                     //back-and-forth with selected player
@@ -468,15 +478,16 @@ public class GameState {
         }
     }
 
-    public boolean examineCard(Card card)//prints out card description
+    public boolean examineCard(Card card) //prints out card description
     {
-        System.out.println(card.toString());//for now;prototype
+        System.out.println(card.toString());//for now: prototype
         return true;
     }
 
+    //exists program, for now;prototype
     public void quitGame()
     {
-        System.exit(0);//exists program, for now;prototype
+        System.exit(0);
     }
 
     public boolean discardCard(PlayableCard card,int player)
@@ -493,25 +504,29 @@ public class GameState {
         }
     }
 
-
+    //method to determine the distance between players:
     private int distanceBetween(int attacker, int target){
+        //if first player, distance is 1 for players 2 and 4, and is 2 for player 3
         if(attacker == 0 ){
             if(target == 1 || target == 3) return 1;
             else if(target ==2) return 2;
         }
+        //if second player, distance is 1 for players 3 and 1, and is 2 for player 4
         else if(attacker == 1){
             if(target == 2 || target == 0 ) return 1;
             else if(target == 3) return 2;
         }
+        //if third player, distance is 1 for players 2 and 4, and is 2 for player 1
         else if(attacker == 2){
             if(target == 3 || target == 1 ) return 1;
             else if(target == 0) return 2;
         }
+        //if fourth player, distance is 1 for players 3 and 1, and is 2 for player 2
         else if (attacker == 3){
             if(target == 0 || target == 2 ) return 1;
             else if(target == 1) return 2;
         }
-        return 0;
+        return 0; //default , return 0
     }
 
 
@@ -532,34 +547,33 @@ public class GameState {
         if (players[attacker].getRange() < distanceBetween(attacker, target)) return false;
         for(PlayableCard p: players[attacker].getCardsInHand())//iterates through entire hand of player
         {
-            if(p.getCardNum()==0)//if particular card is the cardnumber for bang, use it
+            if(p.getCardNum()== BANG)//if particular card is the cardnumber for bang, use it
             {
                 bangsPlayed++; //increases the count of bangsPlayed by 1
                 players[attacker].getCardsInHand().remove(p);//removes bang card
                 discardPile.add(p);
                 for(PlayableCard q: players[target].getCardsInHand())
                 {
-                    if(q.getCardNum()==MISSED) {//if there exists a missed card in the attacked player's hand
+                    if(q.getCardNum()== MISSED) {//if there exists a missed card in the attacked player's hand
                         players[target].getCardsInHand().remove(q);//check if it works - removes missed card if one exists in the attacked player
                         discardPile.add(q);
-                        if(!(players[attacker].getCharacter().getCardNum()==SLABTHEKILLER))
+                        if(players[attacker].getCharacter().getCardNum() != SLABTHEKILLER)
                         {
                             return true;
                         }
                     }
                 }
-
-                    //else, no missed cards are found
-                    players[target].setHealth(players[target].getHealth()-1); //decreases health of target player
-                    if(players[target].getCharacter().getCardNum()==ELGRINGO)
-                    {
-                        drawFromPlayer(target,attacker);
-                    }
-                    else if(players[target].getCharacter().getCardNum()==BARTCASSIDY)
-                    {
-                        draw(target);
-                    }
-                    return true;
+                //else, no missed cards are found
+                players[target].setHealth(players[target].getHealth()-1); //decreases health of target player
+                if(players[target].getCharacter().getCardNum()==ELGRINGO)
+                {
+                    drawFromPlayer(target,attacker);
+                }
+                else if(players[target].getCharacter().getCardNum()==BARTCASSIDY)
+                {
+                    draw(target);
+                }
+                return true;
             }
         }
         return false;//after searching through entire hand, if bang card not found, exits
@@ -597,9 +611,18 @@ public class GameState {
 
     }
 
+
     //shuffle method for the drawPile
     private void shuffle()
     {
+        /*
+         External Citation
+         Date: 20 October 2018
+         Problem: Did not know how to shuffle array list:
+         Resource:
+         https://stackoverflow.com/questions/16112515/how-to-shuffle-an-arraylist
+         Solution: I used the example code from this post.
+         */
         Collections.shuffle(drawPile, rand);//makes use of collections object to shuffle arraylist
     }
 
@@ -661,88 +684,91 @@ public class GameState {
 
         return true;
     }
-    private boolean playIndians(int player){
 
-            if(player == 0){
-                for(PlayableCard p: players[1].getCardsInHand()){
-                    if(p.getCardNum() == BANG){
-                        players[1].getCardsInHand().remove(p);
-                        return true;
-                    }
-                }
-                for(PlayableCard p: players[2].getCardsInHand()){
-                    if(p.getCardNum() == BANG){
-                        players[2].getCardsInHand().remove(p);
-                        return true;
-                    }
-                }
-                for(PlayableCard p: players[3].getCardsInHand()){
-                    if(p.getCardNum() == BANG){
-                        players[3].getCardsInHand().remove(p);
-                        return true;
-                    }
+    //method to play Indians card
+    private boolean playIndians(int player){
+        //checks if the other players have BANGs in their hands, removes the first instance of it and returns:
+
+        if(player == 0){ //if player 1, checks players 4, 2, 3
+            for(PlayableCard p: players[1].getCardsInHand()){
+                if(p.getCardNum() == BANG){
+                    players[1].getCardsInHand().remove(p);
+                    return true;
                 }
             }
-            else if(player == 1){
-                for(PlayableCard p: players[2].getCardsInHand()){
-                    if(p.getCardNum() == BANG){
-                        players[2].getCardsInHand().remove(p);
-                        return true;
-                    }
-                }
-                for(PlayableCard p: players[3].getCardsInHand()){
-                    if(p.getCardNum() == BANG){
-                        players[3].getCardsInHand().remove(p);
-                        return true;
-                    }
-                }
-                for(PlayableCard p: players[0].getCardsInHand()){
-                    if(p.getCardNum() == BANG){
-                        players[0].getCardsInHand().remove(p);
-                        return true;
-                    }
+            for(PlayableCard p: players[2].getCardsInHand()){
+                if(p.getCardNum() == BANG){
+                    players[2].getCardsInHand().remove(p);
+                    return true;
                 }
             }
-            else if(player == 2){
-                for(PlayableCard p: players[3].getCardsInHand()){
-                    if(p.getCardNum() == BANG){
-                        players[3].getCardsInHand().remove(p);
-                        return true;
-                    }
-                }
-                for(PlayableCard p: players[0].getCardsInHand()){
-                    if(p.getCardNum() == BANG){
-                        players[0].getCardsInHand().remove(p);
-                        return true;
-                    }
-                }
-                for(PlayableCard p: players[1].getCardsInHand()){
-                    if(p.getCardNum() == BANG){
-                        players[1].getCardsInHand().remove(p);
-                        return true;
-                    }
+            for(PlayableCard p: players[3].getCardsInHand()){
+                if(p.getCardNum() == BANG){
+                    players[3].getCardsInHand().remove(p);
+                    return true;
                 }
             }
-            else if(player == 3){
-                for(PlayableCard p: players[0].getCardsInHand()){
-                    if(p.getCardNum() == BANG){
-                        players[0].getCardsInHand().remove(p);
-                        return true;
-                    }
-                }
-                for(PlayableCard p: players[1].getCardsInHand()){
-                    if(p.getCardNum() == BANG){
-                        players[1].getCardsInHand().remove(p);
-                        return true;
-                    }
-                }
-                for(PlayableCard p: players[2].getCardsInHand()){
-                    if(p.getCardNum() == BANG){
-                        players[2].getCardsInHand().remove(p);
-                        return true;
-                    }
+        }
+        else if(player == 1){ //if player 2, checks players 1, 3, 4
+            for(PlayableCard p: players[2].getCardsInHand()){
+                if(p.getCardNum() == BANG){
+                    players[2].getCardsInHand().remove(p);
+                    return true;
                 }
             }
-            return false;
+            for(PlayableCard p: players[3].getCardsInHand()){
+                if(p.getCardNum() == BANG){
+                    players[3].getCardsInHand().remove(p);
+                    return true;
+                }
+            }
+            for(PlayableCard p: players[0].getCardsInHand()){
+                if(p.getCardNum() == BANG){
+                    players[0].getCardsInHand().remove(p);
+                    return true;
+                }
+            }
+        }
+        else if(player == 2){ //if player 3, checks players 1, 2, 4
+            for(PlayableCard p: players[3].getCardsInHand()){
+                if(p.getCardNum() == BANG){
+                    players[3].getCardsInHand().remove(p);
+                    return true;
+                }
+            }
+            for(PlayableCard p: players[0].getCardsInHand()){
+                if(p.getCardNum() == BANG){
+                    players[0].getCardsInHand().remove(p);
+                    return true;
+                }
+            }
+            for(PlayableCard p: players[1].getCardsInHand()){
+                if(p.getCardNum() == BANG){
+                    players[1].getCardsInHand().remove(p);
+                    return true;
+                }
+            }
+        }
+        else if(player == 3){ //if player 4, checks players 1, 2, 3
+            for(PlayableCard p: players[0].getCardsInHand()){
+                if(p.getCardNum() == BANG){
+                    players[0].getCardsInHand().remove(p);
+                    return true;
+                }
+            }
+            for(PlayableCard p: players[1].getCardsInHand()){
+                if(p.getCardNum() == BANG){
+                    players[1].getCardsInHand().remove(p);
+                    return true;
+                }
+            }
+            for(PlayableCard p: players[2].getCardsInHand()){
+                if(p.getCardNum() == BANG){
+                    players[2].getCardsInHand().remove(p);
+                    return true;
+                }
+            }
+        }
+        return false; //default: returns false;
     }
 }
