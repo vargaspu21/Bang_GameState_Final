@@ -557,7 +557,7 @@ public class GameState {
                     if(q.getCardNum()== MISSED) {//if there exists a missed card in the attacked player's hand
                         players[target].getCardsInHand().remove(q);//check if it works - removes missed card if one exists in the attacked player
                         discardPile.add(q);
-                        if(players[attacker].getCharacter().getCardNum() != SLABTHEKILLER)
+                        if(!(players[attacker].getCharacter().getCardNum()==SLABTHEKILLER))
                         {
                             return true;
                         }
@@ -610,7 +610,6 @@ public class GameState {
         return string;
 
     }
-
 
     //shuffle method for the drawPile
     private void shuffle()

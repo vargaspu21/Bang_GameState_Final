@@ -11,11 +11,15 @@ import com.example.davidvargas.bang_gamestate.objects.PlayableCard;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+    //added to make thirdinstance test easier
+    public final int GATLING = 12;
+    public final int SALOON = 16;
 
     protected Button runTest;
     protected EditText multiLine;
     protected GameState firstInstance;
     protected GameState secondInstance;
+    protected GameState thirdInstance; //NEWLY ADDED - to test new cards gatling and saloon
 
 
     @Override
@@ -46,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     multiLine.setText("");
                     firstInstance = new GameState();
                     secondInstance = new GameState(firstInstance);
-                multiLine.append("FIRST INSTANCE: \n");
+                    multiLine.append("FIRST INSTANCE: \n");
                     multiLine.append("Adding bang card to player 1 hand...\nAdding a beer card to player 2 hand...\n" +
                             "Adding a bang card to player 3 hand...\n");
                     PlayableCard bangCard = new PlayableCard(false, 0);
@@ -103,6 +107,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     secondInstance.endTurn(2);
                     multiLine.append("Current game state: \n"+ secondInstance.toString());
                     multiLine.append("\n******************************************\n");
+
+                    //initialize new gamestate
+                    //give player 1 2 gatling cards
+                    //give player 2 a saloon card, should heal back to max, others dont
+                    //simulates phase rotations (draw two cards, play cards, end turn, next player... ->)
+                    thirdInstance = new GameState();
+                    thirdInstance.players[0].setCardsInHand(new PlayableCard(false, GATLING));
+                    thirdInstance.players[0].setCardsInHand(new PlayableCard(false, GATLING));
+                    thirdInstance.players[1].setCardsInHand(new PlayableCard(false, SALOON));
+                    thirdInstance.drawTwo(0);
+                    thirdInstance.playCard(0,0,GATLING);
+                    thirdInstance.playCard(0,0,GATLING);
+                    thirdInstance.endTurn(0);
+                    thirdInstance.drawTwo(1);
+                    thirdInstance.playCard(1,1,SALOON);
+                    thirdInstance.endTurn(1);
+                    multiLine.append("Current game state: \n"+ thirdInstance.toString());
+                    multiLine.append("\n******************************************\n");
+
 
 
                 break;
