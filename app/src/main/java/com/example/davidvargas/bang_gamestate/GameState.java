@@ -644,7 +644,7 @@ public class GameState {
             }
         }
         else { //if it is not a blue card
-            c.playCard(); //play card using method from playable card class
+            this.playCard(player, player, c.getCardNum()); //play card using method from playable card class - FIX FOR FULL FUNCTIONALITY
             players[player].getCardsInHand().remove(c); //remove the card from players hand
             endTurn(player); //end turn
             return true;
@@ -687,86 +687,132 @@ public class GameState {
     //method to play Indians card
     private boolean playIndians(int player){
         //checks if the other players have BANGs in their hands, removes the first instance of it and returns:
-
+        int booleanFlag = 0;
         if(player == 0){ //if player 1, checks players 4, 2, 3
             for(PlayableCard p: players[1].getCardsInHand()){
                 if(p.getCardNum() == BANG){
                     players[1].getCardsInHand().remove(p);
-                    return true;
+                    booleanFlag = 1;
+                    break;
                 }
             }
+            if(booleanFlag == 1) players[1].setHealth(players[1].getHealth() - 1);
+
+            booleanFlag = 0;
             for(PlayableCard p: players[2].getCardsInHand()){
                 if(p.getCardNum() == BANG){
                     players[2].getCardsInHand().remove(p);
-                    return true;
+                    booleanFlag = 1;
+                    break;
                 }
             }
+            if(booleanFlag == 1) players[2].setHealth(players[2].getHealth() - 1);
+
+            booleanFlag = 0;
             for(PlayableCard p: players[3].getCardsInHand()){
                 if(p.getCardNum() == BANG){
                     players[3].getCardsInHand().remove(p);
-                    return true;
+                    booleanFlag = 1;
+                    break;
                 }
             }
+            if(booleanFlag == 1) players[3].setHealth(players[3].getHealth() - 1);
+
         }
+
         else if(player == 1){ //if player 2, checks players 1, 3, 4
+            booleanFlag = 0;
             for(PlayableCard p: players[2].getCardsInHand()){
                 if(p.getCardNum() == BANG){
                     players[2].getCardsInHand().remove(p);
-                    return true;
+                    booleanFlag = 1;
+                    break;
                 }
             }
+            if(booleanFlag == 1) players[2].setHealth(players[2].getHealth() - 1);
+
+            booleanFlag = 0;
             for(PlayableCard p: players[3].getCardsInHand()){
                 if(p.getCardNum() == BANG){
                     players[3].getCardsInHand().remove(p);
-                    return true;
+                    booleanFlag = 1;
+                    break;
                 }
             }
+            if(booleanFlag == 1) players[3].setHealth(players[3].getHealth() - 1);
+
+            booleanFlag = 0;
             for(PlayableCard p: players[0].getCardsInHand()){
                 if(p.getCardNum() == BANG){
                     players[0].getCardsInHand().remove(p);
-                    return true;
+                    booleanFlag = 1;
+                    break;
                 }
             }
+            if(booleanFlag == 1) players[0].setHealth(players[0].getHealth() - 1);
+
         }
         else if(player == 2){ //if player 3, checks players 1, 2, 4
+            booleanFlag = 0;
             for(PlayableCard p: players[3].getCardsInHand()){
                 if(p.getCardNum() == BANG){
                     players[3].getCardsInHand().remove(p);
-                    return true;
+                    booleanFlag = 1;
+                    break;
                 }
             }
+            if(booleanFlag == 1) players[3].setHealth(players[3].getHealth() - 1);
+
+            booleanFlag = 0;
             for(PlayableCard p: players[0].getCardsInHand()){
                 if(p.getCardNum() == BANG){
                     players[0].getCardsInHand().remove(p);
-                    return true;
+                    booleanFlag =1;
+                    break;
                 }
             }
+            if(booleanFlag == 1) players[0].setHealth(players[0].getHealth() - 1);
+
+            booleanFlag = 0;
             for(PlayableCard p: players[1].getCardsInHand()){
                 if(p.getCardNum() == BANG){
                     players[1].getCardsInHand().remove(p);
-                    return true;
+                    booleanFlag = 1;
+                    break;
                 }
             }
+            if(booleanFlag == 1) players[1].setHealth(players[1].getHealth() - 1);
         }
         else if(player == 3){ //if player 4, checks players 1, 2, 3
+            booleanFlag = 0;
             for(PlayableCard p: players[0].getCardsInHand()){
                 if(p.getCardNum() == BANG){
                     players[0].getCardsInHand().remove(p);
-                    return true;
+                    booleanFlag = 1;
+                    break;
                 }
             }
+            if(booleanFlag == 1) players[0].setHealth(players[0].getHealth() - 1);
+
+            booleanFlag = 0;
             for(PlayableCard p: players[1].getCardsInHand()){
                 if(p.getCardNum() == BANG){
                     players[1].getCardsInHand().remove(p);
-                    return true;
+                    booleanFlag = 1;
+                    break;
                 }
             }
+            if(booleanFlag == 1) players[1].setHealth(players[1].getHealth() - 1);
+
+            booleanFlag = 0;
             for(PlayableCard p: players[2].getCardsInHand()){
                 if(p.getCardNum() == BANG){
                     players[2].getCardsInHand().remove(p);
-                    return true;
+                    booleanFlag = 1;
+                    break;
                 }
             }
+            if(booleanFlag == 1) players[2].setHealth(players[2].getHealth() - 1);
         }
         return false; //default: returns false;
     }
