@@ -597,73 +597,45 @@ public class GameState {
     //method to determine the distance between players:
     private int distanceBetween(int attacker, int target){
         //if first player, distance is 1 for players 2 and 4, and is 2 for player 3
-
-        if(attacker == 0 ){
-            if(target == 1 || target == 3) {
-                for (PlayableCard p : players[target].getActiveCards()) {
-                    if (p.getCardNum() == MUSTANG)
-                        return 2;
-                }
-                return 1;
-            }
-            else if(target ==2) {
-                for (PlayableCard p : players[target].getActiveCards()) {
-                    if (p.getCardNum() == MUSTANG)
-                        return 3;
-                }
-                return 2;
-            }
+        int distance = 1;
+        /*
+        First checks if the target is Paul Regret if it is, then add one to distance
+        Then checks if the target has a mustang, if player does then adds one to distance
+        These abilities can stack
+         */
+        if(players[target].getCharacter().getCardNum() == PAULREGRET)
+            distance ++;
+        for(PlayableCard p : players[target].getActiveCards()) {
+            if(p.getCardNum() == MUSTANG)
+                distance ++;
         }
+        if(attacker == 0 ){
+            if(target == 1 || target == 3)
+                return distance;
+            else if(target ==2)
+                return distance++;
+            }
         //if second player, distance is 1 for players 3 and 1, and is 2 for player 4
         else if(attacker == 1){
-            if(target == 2 || target == 0 ) {
-                for (PlayableCard p : players[target].getActiveCards()) {
-                    if (p.getCardNum() == MUSTANG)
-                        return 2;
-                }
-                return 1;
-            }
-            else if(target == 3) {
-                for (PlayableCard p : players[target].getActiveCards()) {
-                    if (p.getCardNum() == MUSTANG)
-                        return 3;
-                }
-                return 2;
-            }
+            if(target == 2 || target == 0 )
+                return distance;
+            else if(target == 3)
+                return distance++;
         }
         //if third player, distance is 1 for players 2 and 4, and is 2 for player 1
         else if(attacker == 2){
-            if(target == 3 || target == 1 ) {
-                for (PlayableCard p : players[target].getActiveCards()) {
-                    if (p.getCardNum() == MUSTANG)
-                        return 2;
-                }
-                return 1;
-            }
+            if(target == 3 || target == 1 )
+                return distance;
             else if(target == 0) {
-                for (PlayableCard p : players[target].getActiveCards()) {
-                    if (p.getCardNum() == MUSTANG)
-                        return 3;
-                }
-                return 2;
+                return distance++;
             }
         }
         //if fourth player, distance is 1 for players 3 and 1, and is 2 for player 2
         else if (attacker == 3){
-            if(target == 0 || target == 2 ) {
-                for (PlayableCard p : players[target].getActiveCards()) {
-                    if (p.getCardNum() == MUSTANG)
-                        return 2;
-                }
-                return 1;
-            }
-            else if(target == 1) {
-                for (PlayableCard p : players[target].getActiveCards()) {
-                    if (p.getCardNum() == MUSTANG)
-                        return 3;
-                }
-                return 2;
-            }
+            if(target == 0 || target == 2 )
+                return distance;
+            else if(target == 1)
+                return distance++;
         }
         return 0; //default , return 0
     }
