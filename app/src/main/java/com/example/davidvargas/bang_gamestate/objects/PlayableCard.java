@@ -14,13 +14,16 @@ public class PlayableCard extends Card {
     }
 
     //copy constructor for PlayableCard object
-    public PlayableCard(PlayableCard p){
+    public PlayableCard(PlayableCard p)
+    {
+
         isActive = p.isActive;
         cardNum = p.cardNum;
     }
     //constructor that passes in both parameters
     public PlayableCard(boolean isActive, int cardNum)
     {
+        super(cardNum);
         this.isActive = isActive;
         this.cardNum = cardNum;
     }
@@ -40,6 +43,6 @@ public class PlayableCard extends Card {
     //toString method:
     public String toString()
     {
-        return super.toString() + "Card number: "+cardNum+"\n"+"Is card active: "+String.valueOf(isActive)+"\n";
+        return super.toString() + "\t\t\t\t\t\tCard number: "+cardNum+"\n"+"\t\t\t\t\t\tIs card active: "+String.valueOf(isActive)+"\n";
     }
 }

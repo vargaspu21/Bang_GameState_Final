@@ -29,9 +29,9 @@ public class RoleCard extends Card {
     public String toString()
     {
         //convert role number to string role:
-        if(role == 0) return "The role is a Sheriff\n";
-        else if(role == 1) return "The role is an Outlaw\n";
-        else return "The role is a Renegade\n";
+        if(role == 0) return "\t\t\t\tThe role is a Sheriff\n";
+        else if(role == 1) return "\t\t\t\tThe role is an Outlaw\n";
+        else return "\t\t\t\tThe role is a Renegade\n";
 
     }
 }

@@ -52,6 +52,6 @@ public class CharacterCard extends Card {
     //toString method:
     public String toString()
     {
-        return super.toString()+"Base Health: "+baseHealth+"\n"+ "Ability: "+cardNum+"\n";
+        return super.toString()+"\t\t\tBase Health: "+baseHealth+"\n"+ "\t\t\tAbility: "+cardNum+"\n";
     }
 }

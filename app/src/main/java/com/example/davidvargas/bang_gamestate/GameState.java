@@ -87,10 +87,10 @@ public class GameState {
         drawPile = initDeck(drawPile);
         discardPile = new ArrayList<PlayableCard>();
         players = new PlayerInfo[4];//can fit four players max
-        players[0] = new PlayerInfo();//four new players inserted
-        players[1] = new PlayerInfo();
-        players[2] = new PlayerInfo();
-        players[3] = new PlayerInfo();
+        players[0] = new PlayerInfo(1);//four new players inserted
+        players[1] = new PlayerInfo(2);
+        players[2] = new PlayerInfo(3);
+        players[3] = new PlayerInfo(4);
         playerTurn = 0;//current players turn
         bangsPlayed = 0;//prevents more than one bang card to be played per turn
         /*
@@ -108,10 +108,10 @@ public class GameState {
     {
         //creates a deep copy of each card in the array list:
         drawPile = new ArrayList<PlayableCard>();
-        for(PlayableCard c: gs.drawPile) this.drawPile.add(new PlayableCard(c));
+        for(PlayableCard c: gs.drawPile) this.drawPile.add(new PlayableCard(c.getIsActive(),c.getCardNum()));
         //creates a deep copy of each card in the array list:
         discardPile = new ArrayList<PlayableCard>();
-        for(PlayableCard c: gs.discardPile) this.discardPile.add(new PlayableCard(c));
+        for(PlayableCard c: gs.discardPile) this.discardPile.add(new PlayableCard(c.getIsActive(),c.getCardNum()));
         ////creates a deep copy of each card in the array:
         players = new PlayerInfo[4];
         for(int i = 0; i< players.length; i++) this.players[i] = gs.players[i];
@@ -242,6 +242,7 @@ public class GameState {
 
     public boolean endTurn(int player)//ends the turn, determines next player
     {
+        bangsPlayed = 0;
         if(playerTurn != 4) playerTurn ++;
         else playerTurn = 1;
         return true;
@@ -535,13 +536,9 @@ public class GameState {
     {
         if(bangsPlayed > 1)
         {
-            if(players[attacker].getCharacter().getCardNum()==WILLYTHEKID)
+            if(players[attacker].getCharacter().getCardNum()!=WILLYTHEKID)
             {
-
-            }
-            else
-            {
-                return false; //checks that player has not previously played BANG card
+                return false;
             }
         }
         if (players[attacker].getRange() < distanceBetween(attacker, target)) return false;
@@ -557,10 +554,11 @@ public class GameState {
                     if(q.getCardNum()== MISSED) {//if there exists a missed card in the attacked player's hand
                         players[target].getCardsInHand().remove(q);//check if it works - removes missed card if one exists in the attacked player
                         discardPile.add(q);
-                        if(!(players[attacker].getCharacter().getCardNum()==SLABTHEKILLER))
-                        {
-                            return true;
-                        }
+                        return true;
+                        //if(!(players[attacker].getCharacter().getCardNum()==SLABTHEKILLER))
+                        //{
+                          //  return true;
+                        //}
                     }
                 }
                 //else, no missed cards are found
@@ -599,10 +597,11 @@ public class GameState {
     //toString method:
     public String toString()
     {
+        //DRAWPILE CARDS ARE MOSTLY NULL! For now...
         String string = "\tDraw pile:\n";
-        for(Card c: drawPile) string += "\t\t" + c.toString(); //concatenates strings of the draw pile
+        for(PlayableCard c: drawPile) string +=  c.toString(); //concatenates strings of the draw pile
         string += "\tDiscard pile:\n";
-        for(Card c: discardPile) string += "\t\t" + c.toString(); //concatenates strings of the discard pile
+        for(PlayableCard c: discardPile) string += "\t\t" + c.toString(); //concatenates strings of the discard pile
         string += "\tPlayers:\n";
         for(PlayerInfo p: players) string += p.toString() + "\n"; //concatenates strings of players
         string += "\t\tCurrent player turn: "+playerTurn+"\n"; ///concatenates player turn

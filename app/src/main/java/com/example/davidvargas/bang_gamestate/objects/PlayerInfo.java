@@ -12,6 +12,8 @@ public class PlayerInfo {
     protected CharacterCard character;
     protected ArrayList<PlayableCard> activeCards;
     protected ArrayList<PlayableCard> cardsInHand;
+    protected int name;
+
 
     public PlayerInfo()
     {
@@ -22,6 +24,18 @@ public class PlayerInfo {
         character = new CharacterCard(); //default character too?
         activeCards = new ArrayList<PlayableCard>(); //filler/default cards in hand?
         cardsInHand = new ArrayList<PlayableCard>();
+    }
+
+    public PlayerInfo(int i)
+    {
+        health = 4;
+        range = 1;
+        maxHealth = 4;
+        role = new RoleCard(0); //maybe find a default role to change into?
+        character = new CharacterCard(); //default character too?
+        activeCards = new ArrayList<PlayableCard>(); //filler/default cards in hand?
+        cardsInHand = new ArrayList<PlayableCard>();
+        name = i;
     }
 
     public PlayerInfo(RoleCard role, CharacterCard character)
@@ -47,6 +61,16 @@ public class PlayerInfo {
         for(PlayableCard c: pi.activeCards) this.activeCards.add(c);
         cardsInHand = new ArrayList<PlayableCard>();
         for(PlayableCard c: pi.cardsInHand) this.cardsInHand.add(c);
+    }
+
+    public int getName()
+    {
+        return name;
+    }
+
+    public void setName(int i)
+    {
+        this.name = i;
     }
 
     public int getHealth()
@@ -101,7 +125,7 @@ public class PlayerInfo {
     //toString method for Player's Information:
     public String toString()
     {
-        String s = "\t\tPlayer:\n";
+        String s = "\t\tPlayer " + String.valueOf(name) + ":\n";
         s+= "\t\t\tActive Cards:\n";
         for(PlayableCard p: activeCards) s+= "\t\t\t\t" + p.toString(); //concatenates strings of active cards
         s+= "\t\t\tCards in hand:\n";
