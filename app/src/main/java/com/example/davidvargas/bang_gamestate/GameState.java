@@ -195,7 +195,7 @@ public class GameState {
         }
     }
 
-    private boolean draw(int player)//for singledraw - added 10/21/18
+    public boolean draw(int player)//for singledraw - added 10/21/18
     {
         if(playerTurn != player)
         {
@@ -230,7 +230,7 @@ public class GameState {
         }
     }
 
-    private boolean drawFromPlayer(int player, int target)
+    public boolean drawFromPlayer(int player, int target)
     {
         int handSize = players[target].getCardsInHand().size();//gets size of opponents hand
         int indexToDraw = rand.nextInt(handSize);//randomly chooses card index to draw
