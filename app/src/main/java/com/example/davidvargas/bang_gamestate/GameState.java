@@ -73,6 +73,21 @@ public class GameState {
     public final int NUMBARREL = 2;
     public final int NUMMUSTANG = 2;
 
+    //CConstants for roles
+    public final int SHERIFF = 0;
+    public final int OUTLAW  = 1;
+    public final int RENEGADE = 2;
+
+    //Constants for Suits
+    /*
+    Suits are not fully implemented yet however are big part of the game
+    right now all cards will have a default suit of hearts, however in future this will
+    have to be changed to allow for use of the Draw! mechanic.
+     */
+    public final int HEARTS = 0;
+    public final int SPADES = 1;
+    public final int CLUBS = 2;
+    public final int DIAMONDS = 3;
     //initializes variables:
     protected ArrayList <PlayableCard> drawPile;
     protected ArrayList <PlayableCard> discardPile;
@@ -122,6 +137,8 @@ public class GameState {
     //method to initialize deck: adds specific amount for each card through for loops, and it randomizes the deck
     private ArrayList<PlayableCard> initDeck(ArrayList<PlayableCard> deck)//adds all 80 cards of deck
     {
+        //adds cards based on the Constant amounts (for-loops);
+
         int i;
         for(i=0; i<NUMSCHOFIELD; i++) deck.add(new PlayableCard(true, SCHOFIELD));
         deck.add(new PlayableCard(true, REVCARBINE));
@@ -140,7 +157,7 @@ public class GameState {
         for(i=0; i<NUMINDIANS; i++) deck.add(new PlayableCard(false, INDIANS));
         for(i=0; i<NUMGENERALSTORE; i++) deck.add(new PlayableCard(false, GENERALSTORE));
         deck.add(new PlayableCard(false, SALOON));
-        for(i=0; i<NUMJAIL; i++) deck.add(new PlayableCard(true, JAIL));
+        for(i=0; i<NUMJAIL; i++) deck.add(new PlayableCard (true, JAIL));
         deck.add(new PlayableCard(true, DYNAMITE));
         for(i=0; i<NUMBARREL; i++) deck.add(new PlayableCard(true, BARREL));
         deck.add(new PlayableCard(true, SCOPE));
@@ -149,12 +166,58 @@ public class GameState {
         return deck;
     }
 
-    //draws two cards, used for starting-turn draw
+    //draws two cards, used for starting-turn draw ONLY!!!!
     public boolean drawTwo(int player)
     {
         if(playerTurn != player)//if not their turn, return
         {
             return false;
+        }
+        if(players[player].getHealth() <= 0)
+        {
+            for(int i = 0; i < 4; i++)
+            {
+                if(players[i].getCharacter().getCardNum() == VULTURESAM) {
+                    for (PlayableCard p : players[player].getCardsInHand()) {
+                        players[i].setCardsInHand(p);
+                    }
+                }
+            }
+        }
+        for(PlayableCard p : players[player].getActiveCards())
+        {
+            if(p.getCardNum() == JAIL)
+            {
+                if(!drawExclamation(player, SPADES)) {
+                    players[player].getActiveCards().remove(p);
+                    discardPile.add(p);
+                    playerTurn ++;
+                    return true;
+                }
+                else
+                {
+                    players[player].getActiveCards().remove(p);
+                    discardPile.add(p);
+                }
+            }
+            if(p.getCardNum() == DYNAMITE) {
+                if(drawExclamation(player, HEARTS))
+                {
+                    players[player].getActiveCards().remove(p);
+                    discardPile.add(p);
+                    players[player].setHealth(players[player].getHealth() - 3);
+                    if(players[player].getHealth() <= 0)
+                        return true;
+                }
+                else
+                {
+                    players[player].getActiveCards().remove(p);
+                    if(player < 3)
+                        players[player + 1].setActiveCards(new PlayableCard(true, DYNAMITE));
+                    else if(player == 3)
+                        players[0].setActiveCards(new PlayableCard(true, DYNAMITE));
+                }
+            }
         }
         if(players[player].getCharacter().getCardNum()==JESSEJONES) //if player is Jesse Jones, first card drawn is from a random player
         {
@@ -186,6 +249,25 @@ public class GameState {
             }
             draw(player);
             return true;
+        }
+        else if(players[player].getCharacter().getCardNum() == BLACKJACK) //if character is blackjack try to use their ability
+        {
+            /*
+            Draws the first card then does a suit check for hearts or diamonds on second draw
+            if it succeeds then draw a third card, else only two
+            SUPPOSED TO REVEAL THE SECOND CARD THAT HE DRAWS BUT IDK HOW YET
+             */
+            draw(player);
+            if(drawExclamation(player, HEARTS) || drawExclamation(player, DIAMONDS)){
+                draw(player);
+                draw(player);
+                return true;
+            }
+            else {
+                draw(player);
+                return true;
+            }
+
         }
         else
         {
@@ -258,19 +340,22 @@ public class GameState {
         {
             switch(ability) {
                 case PAULREGRET: //paul regret - +1 distance seen
-                    //NEED TO DO
+                    /*
+                    Implemented within the find distance method
+                    COMPLETED
+                     */
                     return true;
 
                 case JOURDONNAIS: //jourdonnais - if draw heart when BANG'd, MISS'd
-                    draw(player);
+                    //Implement within the bang method
                     //IMPLEMENT - check last card they drew
-                    //CHARACTER ABILITY SKIPPED DUE TO SUIT/NUMBER COMPLEXITY
+                    //CHARACTER ABILITY SKIPPED DUE TO SUIT/NUMBER COMPLEXITY -
+                    /*
+                    Implemented within the bang method
+                     */
 
                 case BLACKJACK: //black jack - shows second card drawn, if heart or diamond, draws another card
-                    drawTwo(player);
-                    //IMPLEMENT - check second card drawn
-                    //CHARACTER ABILITY SKIPPED DUE TO SUIT/NUMBER COMPLEXITY
-                    draw(player); //draws additional card if if() triggers
+                    //Implement within the draw two function, no functionality for showing card yet
 
                 case SLABTHEKILLER: //slab the killer - other player needs 2 misses to cancel bang from him
                     //COMPLETED, happens during playBANG
@@ -308,15 +393,27 @@ public class GameState {
 
                 case LUCKYDUKE: //lucky duke - anytime draws, flips first two cards up and chooses one
                     //IMPLEMENT - new draw system for him
+                    //implemented in drawExclamation method
+                    //simplified so if either the first two cards matches needed suit then he succeeds
 
                 case VULTURESAM: //vulture sam - whenever player eliminated, take all their cards
                     //IMPLEMENT - when player health 0, activate
-
+                    /*
+                    Currently implementing in drawTwo method to check if the current player has 0 health, this could change in future
+                     */
                 case CALAMITYJANET: //calamity janet - play bangs as miss and vice versa
                     //IMPLEMENT - during battle phase
+                    /*
+                    implemented in playBang method.
+                    Currently reduced function, will remove the first instance of either a bang of missed when using either
+                    Will not work with gatling or Indians currently
+                     */
 
                 case KITCARLSON: //kit carlson - looks at top three and draws two if drawTwo
                     //IMPLEMENT - during draw phase
+                    /*
+                    Currently do not have a way to examine cards
+                     */
 
                 default:
                     return false;
@@ -365,17 +462,19 @@ public class GameState {
                     return true;
                 case PANIC: //panic!
                     //player in 1 range gives up a card
-
+                    return playPanic(player, target);
                 case CATBALOU: //cat balou
                     //one player discards a card
-
+                    return playCatBalou(target);
                 case STAGECOACH: //stagecoach
                     //draw two cards
-                    drawTwo(player);
+                    draw(player);
+                    draw(player);
 
                 case WELLSFARGO: //wells fargo
                     //draw three cards
-                    drawTwo(player);
+                    draw(player);
+                    draw(player);
                     draw(player);
                     return true;
 
@@ -403,17 +502,23 @@ public class GameState {
                     return playSaloon(player);
 
                 case JAIL: //jail
-
+                    return playActiveCard(player, target, cardNum);
+                    //start of turn check for jail, if players has then skip turn
+                    //implemented in drawTwo method as that signals start of turn
                 case DYNAMITE: //dynamite
-
+                    return playActiveCard(player, target, cardNum);
+                    //start of turn draw! mechanic to determine if damage is taken.
+                    //implemented in drawTwo function as that signals start of turn
                 case BARREL: //barrel
-
+                    return playActiveCard(player, player, cardNum);
+                    //implemented in bang function,
                 case SCOPE: //scope, you see others -1 distance
                     players[player].setRange(players[player].getRange()-1);
-                    return true;
+                    return playActiveCard(player, player, cardNum);
 
                 case MUSTANG: //mustang, people see you +1 distance
-
+                    return playActiveCard(player, player, cardNum);
+                    //implemented in distance checker method
                 default:
                     return false;
 
@@ -507,31 +612,52 @@ public class GameState {
         }
         else
         {
-            return false;
+            return false; //default: return true;
         }
     }
 
     //method to determine the distance between players:
     private int distanceBetween(int attacker, int target){
         //if first player, distance is 1 for players 2 and 4, and is 2 for player 3
-        if(attacker == 0 ){
-            if(target == 1 || target == 3) return 1;
-            else if(target ==2) return 2;
+        int distance = 1;
+        /*
+        First checks if the target is Paul Regret if it is, then add one to distance
+        Then checks if the target has a mustang, if player does then adds one to distance
+        These abilities can stack
+         */
+        if(players[target].getCharacter().getCardNum() == PAULREGRET)
+            distance ++;
+        for(PlayableCard p : players[target].getActiveCards()) {
+            if(p.getCardNum() == MUSTANG)
+                distance ++;
         }
+        if(attacker == 0 ){
+            if(target == 1 || target == 3)
+                return distance;
+            else if(target ==2)
+                return distance++;
+            }
         //if second player, distance is 1 for players 3 and 1, and is 2 for player 4
         else if(attacker == 1){
-            if(target == 2 || target == 0 ) return 1;
-            else if(target == 3) return 2;
+            if(target == 2 || target == 0 )
+                return distance;
+            else if(target == 3)
+                return distance++;
         }
         //if third player, distance is 1 for players 2 and 4, and is 2 for player 1
         else if(attacker == 2){
-            if(target == 3 || target == 1 ) return 1;
-            else if(target == 0) return 2;
+            if(target == 3 || target == 1 )
+                return distance;
+            else if(target == 0) {
+                return distance++;
+            }
         }
         //if fourth player, distance is 1 for players 3 and 1, and is 2 for player 2
         else if (attacker == 3){
-            if(target == 0 || target == 2 ) return 1;
-            else if(target == 1) return 2;
+            if(target == 0 || target == 2 )
+                return distance;
+            else if(target == 1)
+                return distance++;
         }
         return 0; //default , return 0
     }
@@ -540,7 +666,7 @@ public class GameState {
     //BANG card function:
     public boolean playBANG(int attacker, int target)//automatically uses the attacked player's missed card if found for now
     {
-        if(bangsPlayed > 1)
+        if(bangsPlayed > 1) //if player has used a bang and player character is not Willy The Kid, return false
         {
             if(players[attacker].getCharacter().getCardNum()!=WILLYTHEKID)
             {
@@ -550,17 +676,78 @@ public class GameState {
         if (players[attacker].getRange() < distanceBetween(attacker, target)) return false;
         for(PlayableCard p: players[attacker].getCardsInHand())//iterates through entire hand of player
         {
+            if(players[attacker].getCharacter().getCardNum() == CALAMITYJANET) { //checks if calamityjanets ability is applicable
+                if (p.getCardNum() == BANG || p.getCardNum() == MISSED) {
+                    bangsPlayed++; //increases the count of bangsPlayed by 1
+                    players[attacker].getCardsInHand().remove(p);//removes bang card
+                    discardPile.add(p);
+                    for (PlayableCard r : players[target].getActiveCards()) //searches through targets blue cards for barrel
+                    {
+                        if (r.getCardNum() == BARREL) { //if they have a barrel try for miss
+                            if (drawExclamation(target, SPADES)) //CHANGE TO HEARTS WHEN SUIT IS FULLY IMLPEMENTED
+                            {
+                                return true; //if the draw! is successful then it exits without the target taking damage
+                            }
+                        }
+                        if(players[target].getCharacter().getCardNum() == JOURDONNAIS)
+                        {
+                            if(drawExclamation(target, SPADES)) //CHANGE TO HEARTS WHEN SUIT IS FULLY IMPLEMENTED
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    for (PlayableCard q : players[target].getCardsInHand()) {
+                        if (q.getCardNum() == MISSED) {//if there exists a missed card in the attacked player's hand
+                            players[target].getCardsInHand().remove(q);//check if it works - removes missed card if one exists in the attacked player
+                            discardPile.add(q);
+                            return true;
+                            //SLAB THE KILLER disabled for now due to complexity
+                            //if(!(players[attacker].getCharacter().getCardNum()==SLABTHEKILLER))
+                            //{
+                            //  return true;
+                            //}
+                        }
+                    }
+                }
+            }
             if(p.getCardNum()== BANG)//if particular card is the cardnumber for bang, use it
             {
                 bangsPlayed++; //increases the count of bangsPlayed by 1
                 players[attacker].getCardsInHand().remove(p);//removes bang card
                 discardPile.add(p);
+                for(PlayableCard r : players[target].getActiveCards()) //searches through targets blue cards for barrel
+                {
+                    if(r.getCardNum() == BARREL) { //if
+                        if(drawExclamation(target, SPADES)) //this should actually check for hearts but the default suit is hearts so i made it spades
+                        {
+                            return true; //if the draw! is successful then it exits without the target taking damage
+                        }
+                    }
+                    if(players[target].getCharacter().getCardNum() == JOURDONNAIS)
+                    {
+                        if(drawExclamation(target, SPADES)) //CHANGE TO HEARTS WHEN SUIT IS FULLY IMPLEMENTED
+                        {
+                            return true;
+                        }
+                    }
+                }
                 for(PlayableCard q: players[target].getCardsInHand())
                 {
+                    if(players[target].getCharacter().getCardNum() == CALAMITYJANET)
+                    {
+                        if(q.getCardNum() == MISSED || q.getCardNum() == BANG)
+                        {
+                            players[target].getCardsInHand().remove(q);
+                            discardPile.add(q);
+                            return true;
+                        }
+                    }
                     if(q.getCardNum()== MISSED) {//if there exists a missed card in the attacked player's hand
                         players[target].getCardsInHand().remove(q);//check if it works - removes missed card if one exists in the attacked player
                         discardPile.add(q);
                         return true;
+                        //SLAB THE KILLER disabled for now due to complexity
                         //if(!(players[attacker].getCharacter().getCardNum()==SLABTHEKILLER))
                         //{
                           //  return true;
@@ -569,10 +756,13 @@ public class GameState {
                 }
                 //else, no missed cards are found
                 players[target].setHealth(players[target].getHealth()-1); //decreases health of target player
+
+                //if target's character is El Gringo, takes card from the attacker
                 if(players[target].getCharacter().getCardNum()==ELGRINGO)
                 {
                     drawFromPlayer(target,attacker);
                 }
+                //if target's character is Bart Cassidy, draws a card from deck
                 else if(players[target].getCharacter().getCardNum()==BARTCASSIDY)
                 {
                     draw(target);
@@ -631,29 +821,46 @@ public class GameState {
     }
 
     //playing a card
-    public boolean playFromHandAction(int player, PlayableCard c)
-    {
-        //check if the player has a card
-        if(!(players[player].getCardsInHand().contains(c))) return false;
-        //if this is a blue card
-        if(c.getIsActive())
+    //for now this just removes the card from person playing its hand
+    //as well as add it to the targets active cards
+    public boolean playActiveCard(int player, int target, int card) {
+        boolean flag = false;
+        for(PlayableCard p : players[player].getCardsInHand()) { //checks to see if it is possible to play this card
+            if(p.getCardNum() == card) { //checks players hand
+                for(PlayableCard c : players[target].getActiveCards()) {
+                    if(c.getCardNum() == card) { //checks targets Active cards
+                        players[player].getCardsInHand().remove(p);
+                        flag = true;
+                    }
+                }
+            }
+        }
+        if(flag)
         {
-            //check if its a duplicate card
-            if(players[player].getActiveCards().contains(c)) return false;
-            else
-            {
-                players[player].setActiveCards(c); //add card to active cards
-                players[player].getCardsInHand().remove(c); //remove card from hand
-                endTurn(player); //end turn
+            if(card == JAIL) {
+                if(players[target].getRole().getRole() != SHERIFF) {
+                    players[target].setActiveCards(new PlayableCard(true, JAIL));
+                    return true;
+                }
+            }
+            else if(card == BARREL) {
+                players[target].setActiveCards(new PlayableCard(true,BARREL));
+                return true;
+            }
+            else if(card == SCOPE) {
+                players[target].setActiveCards(new PlayableCard(true, SCOPE));
+                return true;
+            }
+            else if(card == MUSTANG) {
+                players[target].setActiveCards(new PlayableCard(true, MUSTANG));
+                return true;
+            }
+            else if(card == DYNAMITE) {
+                players[target].setActiveCards(new PlayableCard(true, DYNAMITE));
                 return true;
             }
         }
-        else { //if it is not a blue card
-            this.playCard(player, player, c.getCardNum()); //play card using method from playable card class - FIX FOR FULL FUNCTIONALITY
-            players[player].getCardsInHand().remove(c); //remove the card from players hand
-            endTurn(player); //end turn
-            return true;
-        }
+        return false;
     }
 
 
@@ -820,5 +1027,40 @@ public class GameState {
             if(booleanFlag == 1) players[2].setHealth(players[2].getHealth() - 1);
         }
         return false; //default: returns false;
+    }
+    /*
+    The following function uses the suits to make the draw mechanic work, right now
+    suits are not fully implemented.
+     */
+    private boolean drawExclamation(int player, int suit)
+    {
+        if(players[player].getCharacter().getCardNum() == LUCKYDUKE)
+        {
+            if(drawPile.get(0).getSuit() == suit || drawPile.get(1).getSuit() == suit)
+                return true;
+        }
+        if(drawPile.get(0).getSuit() == suit)
+        {
+            return true;
+        }
+        else return false;
+    }
+    private boolean playPanic(int player, int target)
+    {
+        if(distanceBetween(player, target) == 1)
+        {
+            drawFromPlayer(player, target);
+            return true;
+        }
+        else return false;
+    }
+    /*target player discards a card,
+    however currently the card is prechosen, this could be changed lated to allow for target to choose, or attacker to choose.
+     */
+    private boolean playCatBalou(int target)
+    {
+
+        players[target].getCardsInHand().remove(0); //removes the left most card in targets hand
+        return true;
     }
 }

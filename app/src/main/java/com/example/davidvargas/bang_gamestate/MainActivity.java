@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-
+    //initializes variables:
     protected Button runTest;
     protected EditText multiLine;
     protected GameState firstInstance; //player 1 plays bang on player 2
@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     multiLine.setText("");
                     firstInstance = new GameState();
                     secondInstance = new GameState(firstInstance);
+                    multiLine.append("FIRST INSTANCE: \n");
                     firstInstance.drawTwo(0);
                     multiLine.append("Player 1 draws two cards...\n");
                     //ensures runtest works as planned; player 1 has a bang to use on player 2
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //player2 plays gatling card on everyone
                     //player2 ends their turn
                     secondInstance = new GameState(firstInstance);
+                    multiLine.append("SECOND INSTANCE: \n");
                     multiLine.append("It is Player 2's turn...\n");
                     secondInstance.drawTwo(1);
                     multiLine.append("Player 2 draws two cards...\n");
@@ -110,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //player3 plays beer, restores a health
                     //player3 ends their turn
                     thirdInstance = new GameState(secondInstance);
+                    multiLine.append("THIRD INSTANCE: \n");
                     multiLine.append("It is Player 3's turn...\n");
                     thirdInstance.drawTwo(2);
                     multiLine.append("Player 3 draws two cards...\n");
@@ -133,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //player4 plays indians on everyone
                     //player4 ends their turn
                     fourthInstance = new GameState(thirdInstance);
+                    multiLine.append("FOURTH INSTANCE: \n");
                     multiLine.append("It is Player 4's turn...\n");
                     fourthInstance.drawTwo(3);
                     multiLine.append("Player 4 draws two cards...\n");
