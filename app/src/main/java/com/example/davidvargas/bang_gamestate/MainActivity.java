@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.davidvargas.bang_gamestate.objects.CharacterCard;
 import com.example.davidvargas.bang_gamestate.objects.PlayableCard;
 
 import java.util.Random;
@@ -19,6 +20,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public final int BEER = 7;
     public final int INDIANS = 14;
 
+    public final int ELGRINGO = 4;
+    public final int CALAMITYJANET = 14;
 
 
 
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected GameState secondInstance; //player 2 plays bang back, but player 1 misses it, player 2 then uses gatling
     protected GameState thirdInstance; //player 3 plays gatling, then uses a beer to heal a health
     protected GameState fourthInstance; //
+    protected GameState fifthInstance; //MADE 10/31/2018, for new test case to check CharacterCaard and newly-added PlayableCards
 
 
     @Override
@@ -142,6 +146,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     fourthInstance.endTurn(3);
                     multiLine.append("Current game state: \n"+ fourthInstance.toString());
                     multiLine.append("\n******************************************\n");
+
+
+                    //new instance of game
+                    //tests el gringo
+                    //tests calamity janet
+                    //tests new playableCards?
+                    fifthInstance = new GameState();
+                    fifthInstance.players[0].setCharacter(new CharacterCard(4, ELGRINGO));
+                    fifthInstance.players[0].setCardsInHand(new PlayableCard(false, BANG));
+                    fifthInstance.players[1].setCardsInHand(new PlayableCard(false, BANG));
+                    fifthInstance.playBANG(0,1);
+                    fifthInstance.endTurn(0);
+
+
+                    fifthInstance.players[1].setCharacter(new CharacterCard(4, CALAMITYJANET));
+                    fifthInstance.players[1].setCardsInHand(new PlayableCard(false, BANG));
+                    fifthInstance.players[1].setCardsInHand(new PlayableCard(false, MISSED));
+                    fifthInstance.players[1].setCardsInHand(new PlayableCard(false, MISSED));
+                    fifthInstance.players[1].setCardsInHand(new PlayableCard(false, BANG));
+                    fifthInstance.playBANG(1,0);
+                    fifthInstance.playBANG(1,0);
+                    fifthInstance.playBANG(1,0);
+                    fifthInstance.playBANG(1,0);
+                    fifthInstance.endTurn(1);
+
 
                 break;
         }

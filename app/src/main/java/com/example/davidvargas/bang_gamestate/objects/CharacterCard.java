@@ -19,10 +19,10 @@ public class CharacterCard extends Card {
         cardNum = c.cardNum;
     }
     //constructor that passes in health
-    public CharacterCard(int health)
+    public CharacterCard(int health, int num)
     {
         baseHealth = health;
-        cardNum = -1;
+        cardNum = num;
     }
 
     //getter method for cardNum
