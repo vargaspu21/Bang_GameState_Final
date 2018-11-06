@@ -58,5 +58,5 @@ public class ExampleTest
         assertEquals(count, 0);
         //do the same for player 0
     }
-    
+
 }
