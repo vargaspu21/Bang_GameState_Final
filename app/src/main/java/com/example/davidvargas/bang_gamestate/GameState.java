@@ -888,7 +888,7 @@ public class GameState {
     }
 
     //method to play the Duel card:
-    private boolean playDuel(int player, int target) {
+    public boolean playDuel(int player, int target) {
         //initializes counts of bang cards in attacker's and target's hands to 0
         int targetCount = 0;
         int attackerCount = 0;
